@@ -27,7 +27,8 @@ Or add the following to your composer.json in the require section:
 Usage
 -----
 
-The following example shows how to use the component:
+The following example shows how to use the component. All non getter methods not used to read properties or command
+output implement a fluent interface to improve readability:
 
 ```php
 <?php
@@ -42,33 +43,87 @@ class MyJob
     public function doSOmething($remoteUri, $localPath)
     {
         // cloning a remote repository
-        $git = Git::cloneRemote($remoteUri, $localPath); // clones a remote repository into the local path
-        $git->checkout('develop'); // switches to the develop branch
-        // change some files and
+        $git = Git::cloneRemote($remoteUri, $localPath);
+        // switches to the develop branch
+        $git->checkout('develop');
+
+        // your logic here, change some files
+        // ...
+
         $git
-            ->add('.') // adds all the files
-            ->commit('Changed some files') // commits the changes to the develop branch
-            ->checkout('master') // switches to the master branch
-            ->merge('develop') // merges the develop branch into the master branch
-            ->commit('Merged the changes into master.') // commits the changes into the master branch
-            ->run(array('push', '--all')) // pushes the changes to the remote repository using a custom command line
+            // adds all the files
+            ->add('.')
+            // commits the changes to the develop branch
+            ->commit('Changed some files')
+            // switches to the master branch
+            ->checkout('master')
+            // merges the develop branch into the master branch
+            ->merge('develop')
+            // commits the changes into the master branch
+            ->commit('Merged the changes into master.')
+            // pushes the changes to the remote repository using a custom command line
+            ->run(array('push', '--all'))
         ;
 
         // or you can use a local one even if not initialized yet
-        $git = Git::create($localPath, '/usr/local/custom/git'); // new Git project using a custom executable
+        // new Git project using a custom executable
+        $git = Git::create($localPath, '/usr/local/custom/git');
         $git
-            ->init() // this will initialize the Git project if not initialized already
-            ->add('./src') // adds all the files in the folder ./src
-            ->commit('Initial commit (only sources).') // commits the changes
+            // this will initialize the Git project if not initialized already
+            ->init()
+            // adds all the files in the folder ./src
+            ->add('./src')
+            // commits the changes
+            ->commit('Initial commit (only sources).')
         ;
 
-        // retrieve information
-        $logs = $git->getLogs(); // retrieves the last commits hashes and messages
-        $branches = $git->getBranches() // retrieves the list of branches with latest commit hash and message
+        // retrieves the last commits hashes and messages
+        $logs = $git->getLogs();
+        // retrieves the list of branches with latest commit hash and message
+        $branches = $git->getBranches()
     }
 
 }
 ```
+
+The list of shortcut and self-explanatory methods implemented:
+
+ * **init**
+ * **add**
+ * **rm**
+ * **commit**
+ * **branchAdd**
+ * **branchDelete**
+ * **branchList**
+ * **checkout**
+ * **status**
+ * **merge**
+ * **log**
+ * **push**
+ * **pull**
+ * **fetch**
+
+List of other methods provided:
+
+ * **run**, allows you to run any custom Git command you could think of;
+ * **getBranches**, returns an array of branches with related last commit hash and message;
+ * **getStatuses**, returns an array of non commited changes with a status each (in "porcelain" Git flavour);
+ * **getLogs**, returns the array of last commits with related messages, you can specify the size of the array;
+ * **output**, returns the output of the last command executed on the Git project;
+ * **history**, returns the array of all the commands and related outputs executed on the Git project.
+
+List of static methods and basic features:
+
+ * **create** (static), returns a new instance for the specified path and Git executable (optional);
+ * **cloneRemote** (static), returns a new instance cloning the remote repository in the local path;
+ * **getPath**, returns the path of the Git project;
+ * **getDefaults**, returns the default options for the shortcut method (see above the list of shortcut methods);
+ * **setDefaults**, sets the default options for the shortcut method (see above the list of shortcut methods).
+
+When the execution of a Git command fails because of wrong options or for unknown reasons the any method can return a
+*Gioffreda\Component\Git\Exception\GitProcessException*, while if the error happens parsing the output of the command
+the exception will be of *Gioffreda\Component\Git\Exception\GitParsingOutputException*. Both share the same parent so
+they can be caught at once if needed **Gioffreda\Component\Git\Exception\GitException*.
 
 Resources
 ---------
