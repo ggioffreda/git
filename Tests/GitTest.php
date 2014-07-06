@@ -41,6 +41,8 @@ class GitTest extends \PHPUnit_Framework_TestCase
      * @covers ::init
      * @covers ::output
      * @covers ::isInitialized
+     * @covers ::config
+     * @covers ::getConfiguration
      * @depends testCreation
      */
     public function testInitialization()
@@ -60,6 +62,9 @@ class GitTest extends \PHPUnit_Framework_TestCase
         self::$git->config('user.name', $name = 'Giovanni Gioffreda');
         $this->assertEquals($email, trim(self::$git->config('user.email')->output()));
         $this->assertEquals($name, trim(self::$git->config('user.name')->output()));
+        $configuration = self::$git->getConfiguration();
+        $this->assertArrayHasKey('user.email', $configuration);
+        $this->assertArrayHasKey('user.name', $configuration);
     }
 
     /**

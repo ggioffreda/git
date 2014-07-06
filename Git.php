@@ -183,6 +183,27 @@ class Git
         return $this;
     }
 
+    public function getConfiguration()
+    {
+        $output = trim($this->config('-l')->output());
+        $return = array();
+
+        if ($output) {
+            $lines = explode("\n", $output);
+            foreach ($lines as $line)
+            {
+                $matches = array();
+                if (preg_match('/^(?P<name>[^=]+)=(?P<value>.*)$/', $line, $matches)) {
+                    $return[$matches['name']] = $matches['value'];
+                } else {
+                    throw new GitParsingOutputException(sprintf('Unable to parse configuration "%s" from output "%s".', $line, $output));
+                }
+            }
+        }
+
+        return $return;
+    }
+
     /**
      * Adds a file to be included in the next commit.
      *

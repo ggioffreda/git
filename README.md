@@ -51,6 +51,7 @@ The list of shortcut and self-explanatory methods implemented:
 List of other methods provided:
 
  * **run**, allows you to run any custom Git command you could think of;
+ * **getConfiguration**, return an array of Git configuration key and values;
  * **getBranches**, returns an array of branches with related last commit hash and message;
  * **getStatuses**, returns an array of non commited changes with a status each (in "porcelain" Git flavour);
  * **getLogs**, returns the array of last commits with related messages, you can specify the size of the array;
