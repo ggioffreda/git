@@ -3,6 +3,7 @@
 namespace Gioffreda\Component\Git\Tests;
 
 use Gioffreda\Component\Git\Exception\GitException;
+use Gioffreda\Component\Git\Exception\GitProcessException;
 use Gioffreda\Component\Git\Git;
 use Gioffreda\Component\Git\GitFlow;
 use Symfony\Component\Filesystem\Filesystem;
@@ -292,6 +293,13 @@ class GitTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitializingGitFLow()
     {
+        try {
+            self::$git->run(array('flow'));
+        } catch (GitProcessException $gpe) {
+            // if git flow is not installed, don't run this test
+            return;
+        }
+
         $this->assertContains('master', self::$git->flow()->init()->output());
         $this->assertContains('develop', self::$git->flow()->output());
         $this->assertContains('feature/', self::$git->flow()->output());
