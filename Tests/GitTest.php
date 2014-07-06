@@ -201,6 +201,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers ::getStatuses
      * @covers ::getPath
+     * @covers ::diff
      * @depends testFindingBranchInList
      * @dataProvider filesProvider
      */
@@ -215,7 +216,11 @@ class GitTest extends \PHPUnit_Framework_TestCase
         file_put_contents(sprintf('%s/%s', self::$git->getPath(), $file), json_encode($file));
         if (!$remove) {
             $counter++;
+            $this->assertContains('diff', self::$git->diff());
+            $this->assertContains('diff', self::$git->diff($file));
             $this->assertArrayHasKey($file, self::$git->getStatuses());
+        } else {
+            $this->assertNull(self::$git->diff());
         }
         $this->assertCount($counter, self::$git->getStatuses());
     }

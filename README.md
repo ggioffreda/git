@@ -32,6 +32,7 @@ The list of shortcut and self-explanatory methods implemented:
  * **init**, initializes the Git repository if not already initialized;
  * **add**, adds the files matching the provided pattern to the next commit;
  * **rm**, removes the files matching the provided pattern to the next commit;
+ * **diff**, returns the output of the diff command on the whole project or for the specified pattern;
  * **commit**, commits the changes to the current branch;
  * **branchAdd**, creates a new branch with the given name;
  * **branchDelete**, deletes the branch with the given name;

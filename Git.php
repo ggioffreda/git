@@ -82,6 +82,9 @@ class Git
         'push' => array(),
         'fetch' => array(
             'remotes' => '--all'
+        ),
+        'diff' => array(
+            'color' => '--no-color'
         )
     );
 
@@ -412,6 +415,13 @@ class Git
         return $return;
     }
 
+    public function diff($match = null, array $options = array())
+    {
+        return $this->runWithDefaults('diff', array_merge($options, array(
+            $match
+        )));
+    }
+
     /**
      * Pulls the changes from the remote repository.
      *
@@ -565,7 +575,8 @@ class Git
         'log'          => 'log',
         'pull'         => 'pull',
         'push'         => 'push',
-        'fetch'        => 'fetch'
+        'fetch'        => 'fetch',
+        'diff'         => 'diff'
     );
 
 }
