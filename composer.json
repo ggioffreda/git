@@ -1,6 +1,6 @@
 {
     "name": "ggioffreda/git",
-    "description": "A component to use the Git command line tool from your PHP application.",
+    "description": "An advanced PHP wrapper for git and git-flow.",
     "license": "GPL v2 or above",
     "authors": [
         {

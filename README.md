@@ -6,18 +6,18 @@ This component helps interacting with the Git command line tool and the Git-Flow
 This tool is built using the Symfony Process Component (https://github.com/symfony/Process) but can be used in any
 PHP projects. The requirements are specified in the composer.json file:
 
- * PHP version >=5.3.3
- * symfony/Process version >= 2.4
- * symfony/Filesystem version >= 2.2 (only for running the tests in development environment)
- * git
- * git-flow (required only for using the Git-Flow wrapper extension)
+ * [PHP](http://www.php.net/) version >=5.3.3
+ * [symfony/Process](http://symfony.com/doc/current/components/process.html) version >= 2.4
+ * [symfony/Filesystem](http://symfony.com/doc/current/components/filesystem.html) version >= 2.2 (only for running the tests in development environment)
+ * [git](http://git-scm.com/)
+ * [git-flow](https://github.com/nvie/gitflow) (required only for using the Git-Flow wrapper extension)
 
 [![Build Status](https://travis-ci.org/ggioffreda/git.svg?branch=master)](https://travis-ci.org/ggioffreda/git)
 
 Installation
 ------------
 
-From command line run:
+This component is available for installation through [composer](https://getcomposer.org/). From command line run:
 
     $ composer.phar require "ggioffreda/git" "dev-master"
 
@@ -27,6 +27,8 @@ Or add the following to your composer.json in the require section:
         ... other requirements ...,
         "ggioffreda/git": "dev-master"
     }
+
+For more information check the project page on [Packagist](https://packagist.org/packages/ggioffreda/git).
 
 Usage - Git
 -----------
@@ -175,7 +177,7 @@ class MyJob
 Resources
 ---------
 
-You can run the unit tests with the following command:
+You can run the unit tests with the following command (requires [phpunit](http://phpunit.de/)):
 
     $ cd path/to/Gioffreda/Component/Git/
     $ composer.phar install
