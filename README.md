@@ -28,8 +28,8 @@ Or add the following to your composer.json in the require section:
         "ggioffreda/git": "dev-master"
     }
 
-Usage
------
+Usage - Git
+-----------
 
 The list of shortcut and self-explanatory methods implemented for *Git*:
 
@@ -69,6 +69,14 @@ List of static methods and basic features for *Git*:
  * **getDefaults**, returns the default options for the shortcut method (see above the list of shortcut methods);
  * **setDefaults**, sets the default options for the shortcut method (see above the list of shortcut methods).
 
+When the execution of a Git command fails because of wrong options or for unknown reasons the any method can return a
+*Gioffreda\Component\Git\Exception\GitProcessException*, while if the error happens parsing the output of the command
+the exception will be of *Gioffreda\Component\Git\Exception\GitParsingOutputException*. Both share the same parent so
+they can be caught at once if needed *Gioffreda\Component\Git\Exception\GitException*.
+
+Usage - GitFlow
+---------------
+
 List of shortcut and self-explanatory methods implemented for *Git-Flow*:
 
  * **init**, initialized git-flow for the Git project with the default values, to use custom values call the **run** method instead providing the desired options;
@@ -82,10 +90,11 @@ List of shortcut and self-explanatory methods implemented for *Git-Flow*:
  * **output**, returns the output for the last executed command, it's an alias for the parent Git::output() method;
  * **extend** (static), return the git-flow extension wrapper for the given Git project.
 
-When the execution of a Git command fails because of wrong options or for unknown reasons the any method can return a
-*Gioffreda\Component\Git\Exception\GitProcessException*, while if the error happens parsing the output of the command
-the exception will be of *Gioffreda\Component\Git\Exception\GitParsingOutputException*. Both share the same parent so
-they can be caught at once if needed *Gioffreda\Component\Git\Exception\GitException*.
+Beware if the git-flow extension is not available all the above methods (but **output** and **extend**) will throw an
+exception.
+
+Example
+-------
 
 The following example shows how to use the component. All non getter methods not used to read properties or command
 output implement a fluent interface to improve readability:
