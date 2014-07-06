@@ -1,7 +1,7 @@
 Git Component
 =============
 
-This component helps interacting with the Git command line tool.
+This component helps interacting with the Git command line tool and the Git-Flow extension.
 
 This tool is built using the Symfony Process Component (https://github.com/symfony/Process) but can be used in any
 PHP projects. The requirements are specified in the composer.json file:
@@ -9,6 +9,8 @@ PHP projects. The requirements are specified in the composer.json file:
  * PHP version >=5.3.3
  * symfony/Process version >= 2.4
  * symfony/Filesystem version >= 2.2 (only for running the tests in development environment)
+ * git
+ * git-flow (required only for using the Git-Flow wrapper extension)
 
 [![Build Status](https://travis-ci.org/ggioffreda/git.svg?branch=master)](https://travis-ci.org/ggioffreda/git)
 
@@ -29,7 +31,7 @@ Or add the following to your composer.json in the require section:
 Usage
 -----
 
-The list of shortcut and self-explanatory methods implemented:
+The list of shortcut and self-explanatory methods implemented for *Git*:
 
  * **init**, initializes the Git repository if not already initialized;
  * **config**, sets or requests a configuration variable, when getting it you need to call the **output** method afterward to get the value;
@@ -46,9 +48,10 @@ The list of shortcut and self-explanatory methods implemented:
  * **log**, returns the output of the Git log command, by default the last 10 commits;
  * **push**, pushes the commits to the remote repository;
  * **pull**, pulls the commits from the remote repository;
- * **fetch**, fetches the remote branches.
+ * **fetch**, fetches the remote branches;
+ * **flow**, access the git-flow wrapper extension.
 
-List of other methods provided:
+List of other methods provided for *Git*:
 
  * **run**, allows you to run any custom Git command you could think of;
  * **getConfiguration**, return an array of Git configuration key and values;
@@ -58,13 +61,26 @@ List of other methods provided:
  * **output**, returns the output of the last command executed on the Git project;
  * **history**, returns the array of all the commands and related outputs executed on the Git project.
 
-List of static methods and basic features:
+List of static methods and basic features for *Git*:
 
  * **create** (static), returns a new instance for the specified path and Git executable (optional);
  * **cloneRemote** (static), returns a new instance cloning the remote repository in the local path;
  * **getPath**, returns the path of the Git project;
  * **getDefaults**, returns the default options for the shortcut method (see above the list of shortcut methods);
  * **setDefaults**, sets the default options for the shortcut method (see above the list of shortcut methods).
+
+List of shortcut and self-explanatory methods implemented for *Git-Flow*:
+
+ * **init**, initialized git-flow for the Git project with the default values, to use custom values call the **run** method instead providing the desired options;
+ * **feature**, provides the *feature* functions;
+ * **hotfix**, provides the *hotfix* functions;
+ * **release**, provides the *release* functions;
+ * **support**, provides the *support* functions;
+ * **config**, returns the git-flow current configuration;
+ * **version**, returns the git-flow current version;
+ * **run**, allows you to run any custom command through git-flow;
+ * **output**, returns the output for the last executed command, it's an alias for the parent Git::output() method;
+ * **extend** (static), return the git-flow extension wrapper for the given Git project.
 
 When the execution of a Git command fails because of wrong options or for unknown reasons the any method can return a
 *Gioffreda\Component\Git\Exception\GitProcessException*, while if the error happens parsing the output of the command
@@ -125,6 +141,23 @@ class MyJob
         $logs = $git->getLogs();
         // retrieves the list of branches with latest commit hash and message
         $branches = $git->getBranches()
+
+        // using git-flow, initializing it first
+        $git->flow()->init();
+        // starts a new feature
+        $git->flow()->feature(GitFlow::OPERATION_START, 'test1');
+
+        // your logic here, change some files
+        // ...
+
+        $git
+            // mark the changes so they'll be committed
+            ->add('.')
+            // commits the the changes
+            ->commit('feature finished')
+            // finishes the feature
+            ->flow()->feature(GitFlow::OPERATION_FINISH, 'test1')
+        ;
     }
 
 }
