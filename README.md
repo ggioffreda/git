@@ -10,6 +10,8 @@ PHP projects. The requirements are specified in the composer.json file:
  * symfony/Process version >= 2.4
  * symfony/Filesystem version >= 2.2 (only for running the tests in development environment)
 
+[![Build Status](https://travis-ci.org/ggioffreda/git.svg?branch=master)](https://travis-ci.org/ggioffreda/git)
+
 Installation
 ------------
 
