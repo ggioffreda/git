@@ -8,7 +8,7 @@ PHP projects. The requirements are specified in the composer.json file:
 
  * PHP version >=5.3.3
  * symfony/Process version >= 2.4
- * symfony/Filesystem version >= 2.2 (only for running the tests)
+ * symfony/Filesystem version >= 2.2 (only for running the tests in development environment)
 
 Installation
 ------------
@@ -27,6 +27,45 @@ Or add the following to your composer.json in the require section:
 Usage
 -----
 
+The list of shortcut and self-explanatory methods implemented:
+
+ * **init**, initializes the Git repository if not already initialized;
+ * **add**, adds the files matching the provided pattern to the next commit;
+ * **rm**, removes the files matching the provided pattern to the next commit;
+ * **commit**, commits the changes to the current branch;
+ * **branchAdd**, creates a new branch with the given name;
+ * **branchDelete**, deletes the branch with the given name;
+ * **branchList**, lists the branches of the Git repository;
+ * **checkout**, checks out the required entity (can be anything allowed by Git, like a branch, a file or an hash);
+ * **status**, returns the output of the Git status command on the Git project;
+ * **merge**, merges the given branch to the current one;
+ * **log**, returns the output of the Git log command, by default the last 10 commits;
+ * **push**, pushes the commits to the remote repository;
+ * **pull**, pulls the commits from the remote repository;
+ * **fetch**, fetches the remote branches.
+
+List of other methods provided:
+
+ * **run**, allows you to run any custom Git command you could think of;
+ * **getBranches**, returns an array of branches with related last commit hash and message;
+ * **getStatuses**, returns an array of non commited changes with a status each (in "porcelain" Git flavour);
+ * **getLogs**, returns the array of last commits with related messages, you can specify the size of the array;
+ * **output**, returns the output of the last command executed on the Git project;
+ * **history**, returns the array of all the commands and related outputs executed on the Git project.
+
+List of static methods and basic features:
+
+ * **create** (static), returns a new instance for the specified path and Git executable (optional);
+ * **cloneRemote** (static), returns a new instance cloning the remote repository in the local path;
+ * **getPath**, returns the path of the Git project;
+ * **getDefaults**, returns the default options for the shortcut method (see above the list of shortcut methods);
+ * **setDefaults**, sets the default options for the shortcut method (see above the list of shortcut methods).
+
+When the execution of a Git command fails because of wrong options or for unknown reasons the any method can return a
+*Gioffreda\Component\Git\Exception\GitProcessException*, while if the error happens parsing the output of the command
+the exception will be of *Gioffreda\Component\Git\Exception\GitParsingOutputException*. Both share the same parent so
+they can be caught at once if needed *Gioffreda\Component\Git\Exception\GitException*.
+
 The following example shows how to use the component. All non getter methods not used to read properties or command
 output implement a fluent interface to improve readability:
 
@@ -40,7 +79,7 @@ use Gioffreda\Component\Git\Git;
 class MyJob
 {
 
-    public function doSOmething($remoteUri, $localPath)
+    public function doSomething($remoteUri, $localPath)
     {
         // cloning a remote repository
         $git = Git::cloneRemote($remoteUri, $localPath);
@@ -85,45 +124,6 @@ class MyJob
 
 }
 ```
-
-The list of shortcut and self-explanatory methods implemented:
-
- * **init**
- * **add**
- * **rm**
- * **commit**
- * **branchAdd**
- * **branchDelete**
- * **branchList**
- * **checkout**
- * **status**
- * **merge**
- * **log**
- * **push**
- * **pull**
- * **fetch**
-
-List of other methods provided:
-
- * **run**, allows you to run any custom Git command you could think of;
- * **getBranches**, returns an array of branches with related last commit hash and message;
- * **getStatuses**, returns an array of non commited changes with a status each (in "porcelain" Git flavour);
- * **getLogs**, returns the array of last commits with related messages, you can specify the size of the array;
- * **output**, returns the output of the last command executed on the Git project;
- * **history**, returns the array of all the commands and related outputs executed on the Git project.
-
-List of static methods and basic features:
-
- * **create** (static), returns a new instance for the specified path and Git executable (optional);
- * **cloneRemote** (static), returns a new instance cloning the remote repository in the local path;
- * **getPath**, returns the path of the Git project;
- * **getDefaults**, returns the default options for the shortcut method (see above the list of shortcut methods);
- * **setDefaults**, sets the default options for the shortcut method (see above the list of shortcut methods).
-
-When the execution of a Git command fails because of wrong options or for unknown reasons the any method can return a
-*Gioffreda\Component\Git\Exception\GitProcessException*, while if the error happens parsing the output of the command
-the exception will be of *Gioffreda\Component\Git\Exception\GitParsingOutputException*. Both share the same parent so
-they can be caught at once if needed **Gioffreda\Component\Git\Exception\GitException*.
 
 Resources
 ---------
