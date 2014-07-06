@@ -2,7 +2,9 @@
 
 namespace Gioffreda\Component\Git\Tests;
 
+use Gioffreda\Component\Git\Exception\GitException;
 use Gioffreda\Component\Git\Git;
+use Gioffreda\Component\Git\GitFlow;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -283,6 +285,39 @@ class GitTest extends \PHPUnit_Framework_TestCase
     public function testRunException()
     {
         self::$git->run('wrong-command');
+    }
+
+    /**
+     * @covers ::flow
+     */
+    public function testInitializingGitFLow()
+    {
+        $this->assertContains('master', self::$git->flow()->init()->output());
+        $this->assertContains('develop', self::$git->flow()->output());
+        $this->assertContains('feature/', self::$git->flow()->output());
+        $this->assertContains('release/', self::$git->flow()->output());
+        $this->assertContains('hotfix/', self::$git->flow()->output());
+        $this->assertContains('support/', self::$git->flow()->output());
+        // clearing test branches
+        foreach ($this->branchesProvider() as $branch) try {
+            self::$git->branchDelete($branch[0]);
+        } catch (GitException $e) {
+            // do nothing
+        }
+        // feature
+        $this->assertContains('feature/test1', self::$git->flow()->feature(GitFlow::OPERATION_START, 'test1')->output());
+        $this->assertContains('feature/test1', self::$git->status());
+        self::$filesystem->touch(sprintf('%s/%s', self::$git->getPath(), sha1('feature/test1')));
+        $this->assertContains('* test1', self::$git->flow()->feature(GitFlow::OPERATION_LIST)->output());
+        $this->assertContains('Summary of actions', self::$git->add('.')->commit('feature finished')->flow()->feature(GitFlow::OPERATION_FINISH, 'test1')->output());
+        $this->assertContains('develop', self::$git->status());
+        // hotfix
+        $this->assertContains('hotfix/test1', self::$git->flow()->hotfix(GitFlow::OPERATION_START, 'test1')->output());
+        $this->assertContains('hotfix/test1', self::$git->status());
+        self::$filesystem->touch(sprintf('%s/%s', self::$git->getPath(), sha1('hotfix/test1')));
+        $this->assertContains('* test1', self::$git->flow()->hotfix(GitFlow::OPERATION_LIST)->output());
+        //$this->assertContains('Summary of actions', self::$git->add('.')->commit('hotfix finished')->flow()->hotfix(GitFlow::OPERATION_FINISH, 'test1')->output());
+        //$this->assertContains('develop', self::$git->status());
     }
 
     /* PROVIDERS */

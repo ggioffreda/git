@@ -542,6 +542,20 @@ class Git
     }
 
     /**
+     * Return the git-flow extension wrapper.
+     *
+     * @return GitFlow
+     */
+    public function flow()
+    {
+        if (!$this->flow) {
+            $this->flow = GitFlow::extend($this);
+        }
+
+        return $this->flow;
+    }
+
+    /**
      * Create a Git project in the specified path, using the provided executable.
      *
      * @param $path
