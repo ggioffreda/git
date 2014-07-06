@@ -1,0 +1,23 @@
+{
+    "name": "ggioffreda/git",
+    "description": "A component to use the Git command line tool from your PHP application.",
+    "license": "GPL v2 or above",
+    "authors": [
+        {
+            "name": "Giovanni Gioffreda",
+            "email": "giovanni.gioffreda@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/process": ">=2.4,<3.0"
+    },
+    "require-dev": {
+        "symfony/filesystem": ">=2.2,<3.0"
+    },
+    "autoload": {
+        "psr-0": { "Gioffreda\\Component\\Git\\": "" }
+    },
+    "target-dir": "Gioffreda/Component/Git",
+    "minimum-stability": "dev"
+}
