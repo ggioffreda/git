@@ -81,9 +81,9 @@ List of shortcut and self-explanatory methods implemented for *Git-Flow*:
 
  * **init**, initialized git-flow for the Git project with the default values, to use custom values call the **run** method instead providing the desired options;
  * **feature**, provides the *feature* functions;
- * **hotfix**, provides the *hotfix* functions;
- * **release**, provides the *release* functions;
- * **support**, provides the *support* functions;
+ * **hotfix** (stub, untested), provides the *hotfix* functions;
+ * **release** (stub, untested), provides the *release* functions;
+ * **support** (stub, untested), provides the *support* functions;
  * **config**, returns the git-flow current configuration;
  * **version**, returns the git-flow current version;
  * **run**, allows you to run any custom command through git-flow;
