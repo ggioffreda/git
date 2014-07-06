@@ -30,6 +30,7 @@ Usage
 The list of shortcut and self-explanatory methods implemented:
 
  * **init**, initializes the Git repository if not already initialized;
+ * **config**, sets or requests a configuration variable, when getting it you need to call the **output** method afterward to get the value;
  * **add**, adds the files matching the provided pattern to the next commit;
  * **rm**, removes the files matching the provided pattern to the next commit;
  * **diff**, returns the output of the diff command on the whole project or for the specified pattern;

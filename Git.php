@@ -85,7 +85,8 @@ class Git
         ),
         'diff' => array(
             'color' => '--no-color'
-        )
+        ),
+        'config' => array()
     );
 
     /**
@@ -169,6 +170,15 @@ class Git
         if (!self::isInitialized($this->path)) {
             $this->run('init');
         }
+
+        return $this;
+    }
+
+    public function config($var, $val = null, $global = false, array $options = array())
+    {
+        $this->runWithDefaults('config', array_filter(array_merge($options, array(
+            $global ? '--global' : null, $var, $val
+        ))));
 
         return $this;
     }
@@ -576,7 +586,8 @@ class Git
         'pull'         => 'pull',
         'push'         => 'push',
         'fetch'        => 'fetch',
-        'diff'         => 'diff'
+        'diff'         => 'diff',
+        'config'       => 'config'
     );
 
 }

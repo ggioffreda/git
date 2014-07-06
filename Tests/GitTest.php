@@ -54,6 +54,12 @@ class GitTest extends \PHPUnit_Framework_TestCase
         $this->assertStringStartsWith('Initialized empty Git repository in', self::$git->init()->output());
         $this->assertCount(1, $newHistory = self::$git->history());
         $this->assertEquals($history, $newHistory);
+
+        // configuring the user.email and user.name
+        self::$git->config('user.email', $email = 'giovanni@example.com');
+        self::$git->config('user.name', $name = 'Giovanni Gioffreda');
+        $this->assertEquals($email, trim(self::$git->config('user.email')->output()));
+        $this->assertEquals($name, trim(self::$git->config('user.name')->output()));
     }
 
     /**
