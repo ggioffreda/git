@@ -54,6 +54,8 @@ class GitFlow
     /**
      * Provides access to the git-flow hotfix functionality.
      *
+     * Warning: stub, untested
+     *
      * @param $operation
      * @param string|null $name
      * @return $this
@@ -66,6 +68,8 @@ class GitFlow
     /**
      * Provides access to the git-flow release functionality.
      *
+     * Warning: stub, untested
+     *
      * @param $operation
      * @param string|null $name
      * @return $this
@@ -77,6 +81,8 @@ class GitFlow
 
     /**
      * Provides access to the git-flow support functionality.
+     *
+     * Warning: stub, untested
      *
      * @param $operation
      * @param string|null $name
