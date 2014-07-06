@@ -34,6 +34,13 @@ class Git
     protected $path;
 
     /**
+     * The git-flow extension wrapper, it's initialized on request the first time the extension is used.
+     *
+     * @var GitFlow
+     */
+    protected $flow;
+
+    /**
      * The history of the commands and the related output messages.
      *
      * @var array
@@ -174,6 +181,15 @@ class Git
         return $this;
     }
 
+    /**
+     * Sets or requests a configuration variable for Git. Can be set as global or only for the local project.
+     *
+     * @param $var
+     * @param null $val
+     * @param bool $global
+     * @param array $options
+     * @return $this
+     */
     public function config($var, $val = null, $global = false, array $options = array())
     {
         $this->runWithDefaults('config', array_filter(array_merge($options, array(
@@ -183,6 +199,12 @@ class Git
         return $this;
     }
 
+    /**
+     * Returns an array of Git configuration variables.
+     *
+     * @return array
+     * @throws Exception\GitParsingOutputException
+     */
     public function getConfiguration()
     {
         $output = trim($this->config('-l')->output());
@@ -446,6 +468,13 @@ class Git
         return $return;
     }
 
+    /**
+     * Returns the output of the diff command on the whole directory or on the specified pattern.
+     *
+     * @param string|null $match
+     * @param array $options
+     * @return mixed
+     */
     public function diff($match = null, array $options = array())
     {
         return $this->runWithDefaults('diff', array_merge($options, array(
