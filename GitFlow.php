@@ -187,13 +187,15 @@ class GitFlow
      * Pull feature $name from the remote repository
      *
      * @param string $name
+     * @param string|null $remote
      * @return $this
      */
-    public function featurePull($name)
+    public function featurePull($name, $remote = null)
     {
         return $this->run(self::CONTEXT_FEATURE, array(
             self::OPERATION_PULL,
-            $name
+            $name,
+            $remote
         ));
     }
 
