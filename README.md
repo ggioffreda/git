@@ -171,7 +171,7 @@ class MyJob
         // using git-flow, initializing it first
         $git->flow()->init();
         // starts a new feature
-        $git->flow()->feature(GitFlow::OPERATION_START, 'test1');
+        $git->flow()->featureStart('test1');
 
         // your logic here, change some files
         // ...
@@ -182,7 +182,7 @@ class MyJob
             // commits the the changes
             ->commit('feature finished')
             // finishes the feature
-            ->flow()->feature(GitFlow::OPERATION_FINISH, 'test1')
+            ->flow()->featureFinish('test1')
         ;
     }
 
