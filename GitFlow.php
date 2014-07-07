@@ -140,7 +140,7 @@ class GitFlow
     }
 
     /**
-     * Show all changes in $name that are not in <develop>
+     * Show all changes in $name that are not in "develop"
      *
      * @param string $name
      * @return $this
@@ -154,7 +154,7 @@ class GitFlow
     }
 
     /**
-     * Rebase $name on <develop>
+     * Rebase $name on "develop"
      *
      * @param string $name
      * @param bool $interactive do an interactive rebase

@@ -82,12 +82,27 @@ Usage - GitFlow
 List of shortcut and self-explanatory methods implemented for *Git-Flow*:
 
  * **init**, initialized git-flow for the Git project with the default values, to use custom values call the **run** method instead providing the desired options;
- * **feature**, provides the *feature* functions;
- * **hotfix** (stub, untested), provides the *hotfix* functions;
- * **release** (stub, untested), provides the *release* functions;
- * **support** (stub, untested), provides the *support* functions;
- * **config**, returns the git-flow current configuration;
- * **version**, returns the git-flow current version;
+ * **featureList**, lists existing features;
+ * **featureStart**, starts a new feature, optionally basing it on another base instead of "develop";
+ * **featureFinish**, finishes the feature;
+ * **featurePublish**, starts sharing the feature;
+ * **featureTrack**, starts tracking the feature;
+ * **featureDiff**, shows all changes that are not in "develop";
+ * **featureRebase**, rebases on "develop";
+ * **featureCheckout**, switches to the feature branch;
+ * **featurePull**, pull the feature from the remote repository;
+ * **releaseList**, lists existing releases;
+ * **releaseStart**, start a new release;
+ * **releaseFinish**, finishes the release;
+ * **releasePublish**, starts sharing the release;
+ * **releaseTrack**, starts tracking the release;
+ * **hotfixList**, lists existing hotfixes;
+ * **hotfixStart**, start a new hotfix, optionally basing it on a different base than "master";
+ * **hotfixFinish**, finishes the hotfix;
+ * **supportList**, lists existing support branches;
+ * **supportStart**, starts a new support branch;
+ * **getConfiguration**, returns the git-flow current configuration;
+ * **getVersion**, returns the git-flow current version;
  * **run**, allows you to run any custom command through git-flow;
  * **output**, returns the output for the last executed command, it's an alias for the parent Git::output() method;
  * **extend** (static), return the git-flow extension wrapper for the given Git project.
