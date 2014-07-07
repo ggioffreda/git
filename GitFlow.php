@@ -10,9 +10,20 @@ namespace Gioffreda\Component\Git;
 class GitFlow
 {
 
+    const CONTEXT_FEATURE = 'feature';
+    const CONTEXT_RELEASE = 'release';
+    const CONTEXT_HOTFIX = 'hotfix';
+    const CONTEXT_SUPPORT = 'support';
+
+    const OPERATION_LIST = 'list';
     const OPERATION_START = 'start';
     const OPERATION_FINISH  = 'finish';
-    const OPERATION_LIST = 'list';
+    const OPERATION_PUBLISH = 'publish';
+    const OPERATION_TRACK = 'track';
+    const OPERATION_DIFF = 'diff';
+    const OPERATION_REBASE = 'rebase';
+    const OPERATION_CHECKOUT = 'checkout';
+    const OPERATION_PULL = 'pull';
 
     /**
      * @var Git
@@ -29,68 +40,349 @@ class GitFlow
         $this->git = $git;
     }
 
+    // git-flow init
+
     /**
-     * Initializes a git-flow project.
+     * Initialize a new git repo with support for the branching model.
      *
-     * @return $this
+     * @param bool $useDefaults use default branch names
+     * @param bool $force force
+     * @return GitFlow
      */
-    public function init()
+    public function init($useDefaults = true, $force = false)
     {
-        return $this->run('init', '-d');
+        return $this->run('init', array(
+            $useDefaults ? '-d' : null,
+            $force ? '-f' : null
+        ));
+    }
+
+    // git-flow feature
+
+    /**
+     * Lists existing features.
+     *
+     * @param bool $verbose verbose (more) output
+     * @return GitFlow
+     */
+    public function featureList($verbose = false)
+    {
+        return $this->run(self::CONTEXT_FEATURE, array(
+            self::OPERATION_LIST,
+            $verbose ? '-v' : null
+        ));
     }
 
     /**
-     * Provides access to the git-flow feature functionality.
+     * Start new feature $name, optionally basing it on $base instead of "develop"
      *
-     * @param $operation
-     * @param string|null $name
-     * @return $this
+     * @param string $name
+     * @param bool $fetch fetch from $ORIGIN before performing local operation
+     * @param null $base
+     * @return GitFlow
      */
-    public function feature($operation, $name = null)
+    public function featureStart($name, $fetch = false, $base = null)
     {
-        return $this->run('feature', $operation, $name);
+        return $this->run(self::CONTEXT_FEATURE, array(
+            self::OPERATION_START,
+            $fetch ? '-F' : null,
+            $name,
+            $base ? $base : null
+        ));
     }
 
     /**
-     * Provides access to the git-flow hotfix functionality.
+     * Finish feature $name
      *
-     * Warning: stub, untested
-     *
-     * @param $operation
-     * @param string|null $name
-     * @return $this
+     * @param string $name
+     * @param bool $fetch fetch from $ORIGIN before performing finish
+     * @param bool $keep keep branch after performing finish
+     * @param bool $rebase rebase instead of merge
+     * @return GitFlow
      */
-    public function hotfix($operation, $name = null)
+    public function featureFinish($name, $fetch = false, $keep = false, $rebase = false)
     {
-        return $this->run('hotfix', $operation, $name);
+        return $this->run(self::CONTEXT_FEATURE, array(
+            self::OPERATION_FINISH,
+            $fetch ? '-F' : null,
+            $keep ? '-k' : null,
+            $rebase ? '-r' : null,
+            $name
+        ));
     }
 
     /**
-     * Provides access to the git-flow release functionality.
+     * Start sharing feature $name on $ORIGIN
      *
-     * Warning: stub, untested
-     *
-     * @param $operation
-     * @param string|null $name
+     * @param string $name
      * @return $this
      */
-    public function release($operation, $name = null)
+    public function featurePublish($name)
     {
-        return $this->run('release', $operation, $name);
+        return $this->run(self::CONTEXT_FEATURE, array(
+            self::OPERATION_PUBLISH,
+            $name
+        ));
     }
 
     /**
-     * Provides access to the git-flow support functionality.
+     * Start tracking feature $name that is shared on $ORIGIN
      *
-     * Warning: stub, untested
-     *
-     * @param $operation
-     * @param string|null $name
+     * @param string $name
      * @return $this
      */
-    public function support($operation, $name = null)
+    public function featureTrack($name)
     {
-        return $this->run('support', $operation, $name);
+        return $this->run(self::CONTEXT_FEATURE, array(
+            self::OPERATION_TRACK,
+            $name
+        ));
+    }
+
+    /**
+     * Show all changes in $name that are not in <develop>
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function featureDiff($name)
+    {
+        return $this->run(self::CONTEXT_FEATURE, array(
+            self::OPERATION_DIFF,
+            $name
+        ));
+    }
+
+    /**
+     * Rebase $name on <develop>
+     *
+     * @param string $name
+     * @param bool $interactive do an interactive rebase
+     * @return $this
+     */
+    public function featureRebase($name, $interactive = false)
+    {
+        return $this->run(self::CONTEXT_FEATURE, array(
+            self::OPERATION_REBASE,
+            $interactive ? '-i' : null,
+            $name
+        ));
+    }
+
+    /**
+     * Switch to feature branch $name
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function featureCheckout($name)
+    {
+        return $this->run(self::CONTEXT_FEATURE, array(
+            self::OPERATION_CHECKOUT,
+            $name
+        ));
+    }
+
+    /**
+     * Pull feature $name from the remote repository
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function featurePull($name)
+    {
+        return $this->run(self::CONTEXT_FEATURE, array(
+            self::OPERATION_PULL,
+            $name
+        ));
+    }
+
+    // git-flow release
+
+    /**
+     * Lists existing releases
+     *
+     * @param bool $verbose verbose (more) output
+     * @return $this
+     */
+    public function releaseList($verbose = false)
+    {
+        return $this->run(self::CONTEXT_RELEASE, array(
+            self::OPERATION_LIST,
+            $verbose ? '-v' : null
+        ));
+    }
+
+    /**
+     * Start new release named $version
+     *
+     * @param string $version
+     * @param bool $fetch fetch from $ORIGIN before performing local operation
+     * @return $this
+     */
+    public function releaseStart($version, $fetch = false)
+    {
+        return $this->run(self::CONTEXT_RELEASE, array(
+            self::OPERATION_START,
+            $version,
+            $fetch ? '-F' : null
+        ));
+    }
+
+    /**
+     * Finish release $version
+     *
+     * @param string $version
+     * @param null $message use the given tag message
+     * @param bool $notag don't tag this release
+     * @param bool $fetch fetch from $ORIGIN before performing finish
+     * @param bool $keep keep branch after performing finish
+     * @param bool $push push to $ORIGIN after performing finish
+     * @param bool $sign sign the release tag cryptographically
+     * @param null $key use the given GPG-key for the digital signature (implies $sign is true)
+     * @return $this
+     */
+    public function releaseFinish($version, $message, $notag = true, $fetch = false, $keep = false, $push = false, $sign = false, $key = null)
+    {
+        return $this->run(self::CONTEXT_RELEASE, array(
+            self::OPERATION_FINISH,
+            $version,
+            $fetch ? '-F' : null,
+            $keep ? '-k' : null,
+            $push ? '-p' : null,
+            $sign ? '-s' : null,
+            $key ? '-u' : null,
+            $key,
+            $message ? '-m' : null,
+            $message,
+            $notag ? '-n' : null
+        ));
+    }
+
+    /**
+     * Start sharing release $name on $ORIGIN
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function releasePublish($name)
+    {
+        return $this->run(self::CONTEXT_RELEASE, array(
+            self::OPERATION_PUBLISH,
+            $name
+        ));
+    }
+
+    /**
+     * Start tracking release $name that is shared on $ORIGIN
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function releaseTrack($name)
+    {
+        return $this->run(self::CONTEXT_RELEASE, array(
+            self::OPERATION_TRACK,
+            $name
+        ));
+    }
+
+    // git-flow hotfix
+
+    /**
+     * Lists existing hotfixes
+     *
+     * @param bool $verbose verbose (more) output
+     * @return $this
+     */
+    public function hotfixList($verbose = false)
+    {
+        return $this->run(self::CONTEXT_HOTFIX, array(
+            self::OPERATION_LIST,
+            $verbose ? '-v' : null
+        ));
+    }
+
+    /**
+     * Start new hotfix named $name, optionally base it on $base instead of "master"
+     *
+     * @param string $name
+     * @param bool $fetch fetch from $ORIGIN before performing local operation
+     * @param null $base
+     * @return $this
+     */
+    public function hotfixStart($name, $fetch = false, $base = null)
+    {
+        return $this->run(self::CONTEXT_HOTFIX, array(
+            self::OPERATION_START,
+            $fetch ? '-F' : null,
+            $name,
+            $base ? $base : null
+        ));
+    }
+
+    /**
+     * Finish hotfix $name
+     *
+     * @param string $name
+     * @param string $message
+     * @param bool $notag don't tag this release
+     * @param bool $fetch fetch from $ORIGIN before performing finish
+     * @param bool $keep keep branch after performing finish
+     * @param bool $push push to $ORIGIN after performing finish
+     * @param bool $sign sign the release tag cryptographically
+     * @param null $key use the given GPG-key for the digital signature (implies $sign is true)
+     * @return $this
+     */
+    public function hotfixFinish($name, $message, $notag = true, $fetch = false, $keep = false, $push = false, $sign = false, $key = null)
+    {
+        return $this->run(self::CONTEXT_HOTFIX, array(
+            self::OPERATION_FINISH,
+            $name,
+            $fetch ? '-F' : null,
+            $keep ? '-k' : null,
+            $push ? '-p' : null,
+            $sign ? '-s' : null,
+            $key ? '-u' : null,
+            $key,
+            $message ? '-m' : null,
+            $message,
+            $notag ? '-n' : null
+        ));
+    }
+
+    // git-flow support
+
+    /**
+     * Lists existing support branches
+     *
+     * @param bool $verbose verbose (more) output
+     * @return $this
+     */
+    public function supportList($verbose = false)
+    {
+        return $this->run(self::CONTEXT_SUPPORT, array(
+            self::OPERATION_LIST,
+            $verbose ? '-v' : null
+        ));
+    }
+
+    /**
+     * Start new support branch named $version based on $base
+     *
+     * @param string $version
+     * @param null $base
+     * @param bool $fetch fetch from $ORIGIN before performing local operation
+     * @return $this
+     */
+    public function supportStart($version, $base, $fetch = false)
+    {
+        return $this->run(self::CONTEXT_SUPPORT, array(
+            self::OPERATION_START,
+            $fetch ? '-F' : null,
+            $version,
+            $base
+        ));
     }
 
     /**
@@ -98,7 +390,7 @@ class GitFlow
      *
      * @return mixed
      */
-    public function version()
+    public function getVersion()
     {
         return $this->run('version')->output();
     }
@@ -108,24 +400,24 @@ class GitFlow
      *
      * @return $this
      */
-    public function config()
+    public function getConfiguration()
     {
-        return $this->run('config');
+        return $this->run('config')->output();
     }
 
     /**
      * Executes the given git-flow command.
      *
      * @param $context
-     * @param string|null $operation
-     * @param string|null $name
+     * @param array $options
      * @return $this
      */
-    public function run($context, $operation = null, $name = null)
+    public function run($context, array $options = array())
     {
-        $this->git->run(array_filter(array(
-            'flow', $context, $operation, $name
-        )));
+        $this->git->run(array_filter(array_merge(array(
+            'flow',
+            $context
+        ), $options)));
 
         return $this;
     }
