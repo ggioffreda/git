@@ -296,10 +296,10 @@ class GitTest extends \PHPUnit_Framework_TestCase
     public function testInitializingGitFLow()
     {
         try {
-            //elf::$git->run(array('flow'));
+            self::$git->run(array('flow'));
         } catch (GitProcessException $gpe) {
             // if git flow is not installed, don't run this test
-            return;
+            return false;
         }
 
         $this->assertContains('master', self::$git->flow()->init()->output());
@@ -315,6 +315,8 @@ class GitTest extends \PHPUnit_Framework_TestCase
         } catch (GitException $e) {
             // do nothing
         }
+
+        return true;
     }
 
     /**
@@ -323,14 +325,20 @@ class GitTest extends \PHPUnit_Framework_TestCase
      * @covers \Gioffreda\Component\Git\GitFlow::featureFinish
      * @depends testInitializingGitFLow
      */
-    public function testGitFlowFeature()
+    public function testGitFlowFeature($flowInstalled)
     {
+        if (!$flowInstalled) {
+            return false;
+        }
+
         $this->assertContains('feature/test1', self::$git->flow()->featureStart('test1')->output());
         $this->assertContains('feature/test1', self::$git->status());
         self::$filesystem->touch(sprintf('%s/%s', self::$git->getPath(), sha1('feature/test1')));
         $this->assertContains('* test1', self::$git->flow()->featureList()->output());
         $this->assertContains('Summary of actions', self::$git->add('.')->commit('Lorem ipsum feature updated')->flow()->featureFinish('test1')->output());
         $this->assertContains('develop', self::$git->status());
+
+        return true;
     }
 
     /**
@@ -339,14 +347,20 @@ class GitTest extends \PHPUnit_Framework_TestCase
      * @covers \Gioffreda\Component\Git\GitFlow::hotfixFinish
      * @depends testGitFlowFeature
      */
-    public function testGitFlowHotfix()
+    public function testGitFlowHotfix($flowInstalled)
     {
+        if (!$flowInstalled) {
+            return false;
+        }
+
         $this->assertContains('hotfix/test1', self::$git->flow()->hotfixStart('test1')->output());
         $this->assertContains('hotfix/test1', self::$git->status());
         self::$filesystem->touch(sprintf('%s/%s', self::$git->getPath(), sha1('hotfix/test1')));
         $this->assertContains('* test1', self::$git->flow()->hotfixList()->output());
         $this->assertContains('Summary of actions', self::$git->add('.')->commit('Lorem ipsum hotfix updated')->flow()->hotfixFinish('test1', 'tag')->output());
         $this->assertContains('develop', self::$git->status());
+
+        return true;
     }
 
     /**
@@ -355,14 +369,20 @@ class GitTest extends \PHPUnit_Framework_TestCase
      * @covers \Gioffreda\Component\Git\GitFlow::releaseFinish
      * @depends testGitFlowHotfix
      */
-    public function testGitFlowRelease()
+    public function testGitFlowRelease($flowInstalled)
     {
+        if (!$flowInstalled) {
+            return false;
+        }
+
         $this->assertContains('release/t1', self::$git->flow()->releaseStart('t1')->output());
         $this->assertContains('release/t1', self::$git->status());
         self::$filesystem->touch(sprintf('%s/%s', self::$git->getPath(), sha1('release/t1')));
         $this->assertContains('* t1', self::$git->flow()->releaseList()->output());
         $this->assertContains('Summary of actions', self::$git->add('.')->commit('Lorem ipsum release updated')->flow()->releaseFinish('t1', 'tag')->output());
         $this->assertContains('develop', self::$git->status());
+
+        return true;
     }
 
     /**
@@ -370,18 +390,24 @@ class GitTest extends \PHPUnit_Framework_TestCase
      * @covers \Gioffreda\Component\Git\GitFlow::supportList
      * @depends testGitFlowHotfix
      */
-    public function testGitFlowSupport()
+    public function testGitFlowSupport($flowInstalled)
     {
+        if (!$flowInstalled) {
+            return false;
+        }
+
         $this->assertContains('support/t1', self::$git->flow()->supportStart('t1', 'master')->output());
         $this->assertContains('support/t1', self::$git->status());
         self::$filesystem->touch(sprintf('%s/%s', self::$git->getPath(), sha1('support/t1')));
         $this->assertContains('* t1', self::$git->flow()->supportList()->output());
+
+        return true;
     }
 
     /**
      * @covers \Gioffreda\Component\Git\Exception\GitProcessException
      * @expectedException \Gioffreda\Component\Git\Exception\GitProcessException
-     * @depends testRun
+     * @depends testGitFlowSupport
      */
     public function testGitFlowRunException()
     {
