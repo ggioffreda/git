@@ -197,3 +197,9 @@ You can run the unit tests with the following command (requires [phpunit](http:/
     $ cd path/to/Gioffreda/Component/Git/
     $ composer.phar install
     $ phpunit
+
+License
+-------
+
+This software is distributed under the following licenses: [GNU GPL v2](LICENSE_GPLv2.md),
+[GNU GPL v3](LICENSE_GPLv3.md) and [MIT License](LICENSE_MIT.md). You may choose the one that best suits your needs.
