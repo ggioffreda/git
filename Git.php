@@ -344,7 +344,7 @@ class Git
             foreach ($lines as $line)
             {
                 $matches = array();
-                if (preg_match('/^(?P<branch>[^\s]+)\s+(?P<hash>[^\s]+)\s*(?P<message>.*)?$/', ltrim($line, " *\n"), $matches)) {
+                if (preg_match('/^(?P<branch>[^\s]+)\s+(?:->\s+)?(?P<hash>[^\s]+)\s*(?P<message>.*)?$/', ltrim($line, " *\n"), $matches)) {
                     $return[$matches['branch']] = array(
                         'hash' => $matches['hash'],
                         'message' => isset($matches['message']) ? $matches['message'] : ''
