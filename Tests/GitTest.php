@@ -106,6 +106,37 @@ class GitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::mv
+     * @covers ::history
+     * @covers ::status
+     * @expectedException \Gioffreda\Component\Git\Exception\GitProcessException
+     * @depends testAddingAndRemoving
+     */
+    public function testMovingFailed()
+    {
+        $origin = 'originfile';
+        $destination = 'detinationfile';
+        self::getFilesystem()->touch(sprintf('%s/%s', self::$git->getPath(), $origin));
+        $this->assertNotEmpty(self::$git->status());
+        $this->assertContains($origin, self::$git->status());
+        $this->assertContains($destination, self::$git->mv($origin, $destination)->status());
+    }
+
+    /**
+     * @covers ::mv
+     * @depends testMovingFailed
+     */
+    public function testActuallyMoving()
+    {
+        $origin = 'originfile';
+        $destination = 'detinationfile';
+        $this->assertContains('Untracked files', self::$git->add($origin)->status());
+        $this->assertNotEmpty(self::$git->status());
+        $this->assertContains($origin, self::$git->status());
+        $this->assertContains($destination, self::$git->mv($origin, $destination)->status());
+    }
+
+    /**
      * @covers ::commit
      * @covers ::output
      * @covers ::history

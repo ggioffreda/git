@@ -63,6 +63,7 @@ class Git
             'strategy' => '--cached',
             'recursive' => '-r'
         ),
+        'mv' => array(),
         'commit' => array(),
         'branchAdd' => array(),
         'branchDelete' => array(
@@ -249,8 +250,17 @@ class Git
      */
     public function rm($match, array $options = array())
     {
-
         $this->runWithDefaults('rm', $options, $match);
+
+        return $this;
+    }
+
+    public function mv($origin, $destination, array $options = array())
+    {
+        $this->runWithDefaults('mv', array_merge($options, array(
+            $origin,
+            $destination
+        )));
 
         return $this;
     }
@@ -651,7 +661,8 @@ class Git
         'push'         => 'push',
         'fetch'        => 'fetch',
         'diff'         => 'diff',
-        'config'       => 'config'
+        'config'       => 'config',
+        'mv'           => 'mv'
     );
 
 }
