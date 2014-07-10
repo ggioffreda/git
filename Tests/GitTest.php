@@ -503,7 +503,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-        //self::getFilesystem()->remove(self::$git->getPath());
+        self::getFilesystem()->remove(self::$git->getPath());
     }
 
 }
