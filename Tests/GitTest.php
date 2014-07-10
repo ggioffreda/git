@@ -202,6 +202,18 @@ class GitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::show
+     * @depends testDumpingStatus
+     */
+    public function testShowing()
+    {
+        $this->assertContains('author', self::$git->show('master'));
+        $this->assertContains('committer', self::$git->output());
+        $this->assertContains('Initial commit.', self::$git->output());
+        $this->assertContains('Giovanni Gioffreda', self::$git->output());
+    }
+
+    /**
      * @covers ::getStatuses
      * @depends testDumpingStatus
      * @dataProvider filesProvider

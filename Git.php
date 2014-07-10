@@ -94,6 +94,11 @@ class Git
         'diff' => array(
             'color' => '--no-color'
         ),
+        'show' => array(
+            'format' => '--format=raw',
+            'color' => '--no-color',
+            'abbreviation' => '--no-abbrev-commit'
+        ),
         'config' => array()
     );
 
@@ -366,6 +371,14 @@ class Git
         }
 
         return $return;
+    }
+
+    public function show($what, array $options = array())
+    {
+        return $this->runWithDefaults('show', array_merge(
+            $options,
+            is_array($what) ? $what : array($what)
+        ));
     }
 
     /**
@@ -662,7 +675,8 @@ class Git
         'fetch'        => 'fetch',
         'diff'         => 'diff',
         'config'       => 'config',
-        'mv'           => 'mv'
+        'mv'           => 'mv',
+        'show'         => 'show'
     );
 
 }
