@@ -140,7 +140,7 @@ class Git
      *
      * @param $command
      * @param array $defaults
-     * @return $this
+     * @return Git
      */
     public function setDefaults($command, array $defaults)
     {
@@ -176,7 +176,7 @@ class Git
     /**
      * Initializes the Git project if it has not been initialized already.
      *
-     * @return $this
+     * @return Git
      */
     public function init()
     {
@@ -194,7 +194,7 @@ class Git
      * @param null $val
      * @param bool $global
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function config($var, $val = null, $global = false, array $options = array())
     {
@@ -237,7 +237,7 @@ class Git
      *
      * @param $match
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function add($match, array $options = array())
     {
@@ -251,7 +251,7 @@ class Git
      *
      * @param $match
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function rm($match, array $options = array())
     {
@@ -266,7 +266,7 @@ class Git
      * @param string $origin
      * @param string $destination
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function mv($origin, $destination, array $options = array())
     {
@@ -283,7 +283,7 @@ class Git
      *
      * @param $message
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function commit($message, array $options = array())
     {
@@ -297,7 +297,7 @@ class Git
      *
      * @param $branch
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function branchAdd($branch, array $options = array())
     {
@@ -311,7 +311,7 @@ class Git
      *
      * @param $branch
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function branchDelete($branch, array $options = array())
     {
@@ -325,7 +325,7 @@ class Git
      *
      * @param $id
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function checkout($id, array $options = array())
     {
@@ -446,7 +446,7 @@ class Git
      *
      * @param $branch
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function merge($branch, array $options = array())
     {
@@ -524,7 +524,7 @@ class Git
      * Pulls the changes from the remote repository.
      *
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function pull(array $options = array())
     {
@@ -537,7 +537,7 @@ class Git
      * Pushes the changes to the remote repository.
      *
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function push(array $options = array())
     {
@@ -550,7 +550,7 @@ class Git
      * Fetches the remotes.
      *
      * @param array $options
-     * @return $this
+     * @return Git
      */
     public function fetch(array $options = array())
     {
