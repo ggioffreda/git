@@ -260,6 +260,14 @@ class Git
         return $this;
     }
 
+    /**
+     * Move $origin to $destination
+     *
+     * @param string $origin
+     * @param string $destination
+     * @param array $options
+     * @return $this
+     */
     public function mv($origin, $destination, array $options = array())
     {
         $this->runWithDefaults('mv', array_merge($options, array(
@@ -373,6 +381,13 @@ class Git
         return $return;
     }
 
+    /**
+     * Returns the output of "git show".
+     *
+     * @param string $what
+     * @param array $options
+     * @return string
+     */
     public function show($what, array $options = array())
     {
         return $this->runWithDefaults('show', array_merge(
