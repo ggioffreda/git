@@ -39,7 +39,9 @@ The list of shortcut and self-explanatory methods implemented for *Git*:
  * **config**, sets or requests a configuration variable, when getting it you need to call the **output** method afterward to get the value;
  * **add**, adds the files matching the provided pattern to the next commit;
  * **rm**, removes the files matching the provided pattern to the next commit;
+ * **mv**, moves the file from origin to destination;
  * **diff**, returns the output of the diff command on the whole project or for the specified pattern;
+ * **show**, returns the output of the show command for the specified object;
  * **commit**, commits the changes to the current branch;
  * **branchAdd**, creates a new branch with the given name;
  * **branchDelete**, deletes the branch with the given name;
