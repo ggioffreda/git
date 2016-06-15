@@ -19,13 +19,13 @@ Installation
 
 This component is available for installation through [composer](https://getcomposer.org/). From command line run:
 
-    $ composer.phar require "ggioffreda/git" "dev-master"
+    $ composer require "ggioffreda/git" "~0.1"
 
 Or add the following to your composer.json in the require section:
 
     "require": {
         ... other requirements ...,
-        "ggioffreda/git": "dev-master"
+        "ggioffreda/git": "~0.1"
     }
 
 For more information check the project page on [Packagist](https://packagist.org/packages/ggioffreda/git).
