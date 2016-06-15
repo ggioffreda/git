@@ -6,11 +6,14 @@ This component helps interacting with the Git command line tool and the Git-Flow
 This tool is built using the Symfony Process Component (https://github.com/symfony/Process) but can be used in any
 PHP projects. The requirements are specified in the composer.json file:
 
- * [PHP](http://www.php.net/) version >=5.3.3
+ * [PHP](http://www.php.net/) version >=5.4
  * [symfony/Process](http://symfony.com/doc/current/components/process.html) version >= 2.4
  * [symfony/Filesystem](http://symfony.com/doc/current/components/filesystem.html) version >= 2.2 (only for running the tests in development environment)
  * [git](http://git-scm.com/)
  * [git-flow](https://github.com/nvie/gitflow) (required only for using the Git-Flow wrapper extension)
+
+Although the component might perfectly work on PHP 5.3 that version is abandoned and the support has ended more than two
+years ago so it's time to let go. PHP 5.4 will follow the same destiny in the next future.
 
 [![Build Status](https://travis-ci.org/ggioffreda/git.svg?branch=master)](https://travis-ci.org/ggioffreda/git)
 
