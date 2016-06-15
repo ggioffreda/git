@@ -18,6 +18,5 @@
     "autoload": {
         "psr-0": { "Gioffreda\\Component\\Git\\": "" }
     },
-    "target-dir": "Gioffreda/Component/Git",
-    "minimum-stability": "dev"
+    "target-dir": "Gioffreda/Component/Git"
 }
