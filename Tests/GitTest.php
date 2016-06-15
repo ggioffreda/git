@@ -198,7 +198,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
      */
     public function testDumpingStatus()
     {
-        $this->assertStringStartsWith('On branch', self::$git->status());
+        $this->assertContains('On branch', self::$git->status());
     }
 
     /**
