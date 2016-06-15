@@ -51,12 +51,12 @@ class GitTest extends \PHPUnit_Framework_TestCase
     public function testInitialization()
     {
         $this->assertFalse(Git::isInitialized(self::$git->getPath()));
-        $this->assertStringStartsWith('Initialized empty Git repository in', self::$git->init()->output());
+        $this->assertRegExp('/^Initiali(s|z)ed empty Git repository in/', self::$git->init()->output());
         $this->assertTrue(Git::isInitialized(self::$git->getPath()));
         $this->assertCount(1, $history = self::$git->history());
 
         // reinitialization should have no effect
-        $this->assertStringStartsWith('Initialized empty Git repository in', self::$git->init()->output());
+        $this->assertRegExp('/^Initiali(s|z)ed empty Git repository in/', self::$git->init()->output());
         $this->assertCount(1, $newHistory = self::$git->history());
         $this->assertEquals($history, $newHistory);
 
@@ -97,7 +97,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
     public function testAddingAndRemoving($file, $remove)
     {
         $counter = count(self::$git->history());
-        $this->assertNull(self::$git->add($file)->output());
+        $this->assertEmpty(self::$git->add($file)->output());
         $this->assertCount(++$counter, self::$git->history());
         if ($remove) {
             $this->assertStringStartsWith(sprintf("rm '%s'", $file), self::$git->rm($file)->output());
@@ -157,15 +157,15 @@ class GitTest extends \PHPUnit_Framework_TestCase
      */
     public function testBranching()
     {
-        $this->assertNull(self::$git->branchAdd($branch = 'develop')->output());
+        $this->assertEmpty(self::$git->branchAdd($branch = 'develop')->output());
         $this->assertStringStartsWith('Deleted branch', self::$git->branchDelete($branch)->output());
 
         // Adding another
-        $this->assertNull(self::$git->branchAdd($branch = 'v1.2.3')->output());
+        $this->assertEmpty(self::$git->branchAdd($branch = 'v1.2.3')->output());
         $this->assertStringStartsWith('Deleted branch', self::$git->branchDelete($branch)->output());
 
         // Adding another with a slash
-        $this->assertNull(self::$git->branchAdd($branch = 'feature/a-new-one')->output());
+        $this->assertEmpty(self::$git->branchAdd($branch = 'feature/a-new-one')->output());
         $this->assertStringStartsWith('Deleted branch', self::$git->branchDelete($branch)->output());
     }
 
@@ -177,7 +177,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddBranch($branch)
     {
-        $this->assertNull(self::$git->branchAdd($branch)->output());
+        $this->assertEmpty(self::$git->branchAdd($branch)->output());
     }
 
     /**
@@ -188,8 +188,8 @@ class GitTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckingOut($branch)
     {
-        $this->assertNull(self::$git->checkout($branch)->output());
-        $this->assertNull(self::$git->checkout($branch)->output());
+        $this->assertEmpty(self::$git->checkout($branch)->output());
+        $this->assertEmpty(self::$git->checkout($branch)->output());
     }
 
     /**
@@ -277,7 +277,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
             $this->assertContains('diff', self::$git->diff($file));
             $this->assertArrayHasKey($file, self::$git->getStatuses());
         } else {
-            $this->assertNull(self::$git->diff());
+            $this->assertEmpty(self::$git->diff());
         }
         $this->assertCount($counter, self::$git->getStatuses());
     }
