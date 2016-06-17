@@ -51,10 +51,10 @@ class GitFlow
      */
     public function init($useDefaults = true, $force = false)
     {
-        return $this->run('init', array(
+        return $this->run('init', [
             $useDefaults ? '-d' : null,
             $force ? '-f' : null
-        ));
+        ]);
     }
 
     // git-flow feature
@@ -67,10 +67,10 @@ class GitFlow
      */
     public function featureList($verbose = false)
     {
-        return $this->run(self::CONTEXT_FEATURE, array(
+        return $this->run(self::CONTEXT_FEATURE, [
             self::OPERATION_LIST,
             $verbose ? '-v' : null
-        ));
+        ]);
     }
 
     /**
@@ -83,12 +83,12 @@ class GitFlow
      */
     public function featureStart($name, $fetch = false, $base = null)
     {
-        return $this->run(self::CONTEXT_FEATURE, array(
+        return $this->run(self::CONTEXT_FEATURE, [
             self::OPERATION_START,
             $fetch ? '-F' : null,
             $name,
             $base ? $base : null
-        ));
+        ]);
     }
 
     /**
@@ -102,13 +102,13 @@ class GitFlow
      */
     public function featureFinish($name, $fetch = false, $keep = false, $rebase = false)
     {
-        return $this->run(self::CONTEXT_FEATURE, array(
+        return $this->run(self::CONTEXT_FEATURE, [
             self::OPERATION_FINISH,
             $fetch ? '-F' : null,
             $keep ? '-k' : null,
             $rebase ? '-r' : null,
             $name
-        ));
+        ]);
     }
 
     /**
@@ -119,10 +119,10 @@ class GitFlow
      */
     public function featurePublish($name)
     {
-        return $this->run(self::CONTEXT_FEATURE, array(
+        return $this->run(self::CONTEXT_FEATURE, [
             self::OPERATION_PUBLISH,
             $name
-        ));
+        ]);
     }
 
     /**
@@ -133,10 +133,10 @@ class GitFlow
      */
     public function featureTrack($name)
     {
-        return $this->run(self::CONTEXT_FEATURE, array(
+        return $this->run(self::CONTEXT_FEATURE, [
             self::OPERATION_TRACK,
             $name
-        ));
+        ]);
     }
 
     /**
@@ -147,10 +147,10 @@ class GitFlow
      */
     public function featureDiff($name)
     {
-        return $this->run(self::CONTEXT_FEATURE, array(
+        return $this->run(self::CONTEXT_FEATURE, [
             self::OPERATION_DIFF,
             $name
-        ));
+        ]);
     }
 
     /**
@@ -162,11 +162,11 @@ class GitFlow
      */
     public function featureRebase($name, $interactive = false)
     {
-        return $this->run(self::CONTEXT_FEATURE, array(
+        return $this->run(self::CONTEXT_FEATURE, [
             self::OPERATION_REBASE,
             $interactive ? '-i' : null,
             $name
-        ));
+        ]);
     }
 
     /**
@@ -177,10 +177,10 @@ class GitFlow
      */
     public function featureCheckout($name)
     {
-        return $this->run(self::CONTEXT_FEATURE, array(
+        return $this->run(self::CONTEXT_FEATURE, [
             self::OPERATION_CHECKOUT,
             $name
-        ));
+        ]);
     }
 
     /**
@@ -192,11 +192,11 @@ class GitFlow
      */
     public function featurePull($name, $remote = null)
     {
-        return $this->run(self::CONTEXT_FEATURE, array(
+        return $this->run(self::CONTEXT_FEATURE, [
             self::OPERATION_PULL,
             $name,
             $remote
-        ));
+        ]);
     }
 
     // git-flow release
@@ -209,10 +209,10 @@ class GitFlow
      */
     public function releaseList($verbose = false)
     {
-        return $this->run(self::CONTEXT_RELEASE, array(
+        return $this->run(self::CONTEXT_RELEASE, [
             self::OPERATION_LIST,
             $verbose ? '-v' : null
-        ));
+        ]);
     }
 
     /**
@@ -224,11 +224,11 @@ class GitFlow
      */
     public function releaseStart($version, $fetch = false)
     {
-        return $this->run(self::CONTEXT_RELEASE, array(
+        return $this->run(self::CONTEXT_RELEASE, [
             self::OPERATION_START,
             $version,
             $fetch ? '-F' : null
-        ));
+        ]);
     }
 
     /**
@@ -246,7 +246,7 @@ class GitFlow
      */
     public function releaseFinish($version, $message, $notag = true, $fetch = false, $keep = false, $push = false, $sign = false, $key = null)
     {
-        return $this->run(self::CONTEXT_RELEASE, array(
+        return $this->run(self::CONTEXT_RELEASE, [
             self::OPERATION_FINISH,
             $version,
             $fetch ? '-F' : null,
@@ -258,7 +258,7 @@ class GitFlow
             $message ? '-m' : null,
             $message,
             $notag ? '-n' : null
-        ));
+        ]);
     }
 
     /**
@@ -269,10 +269,10 @@ class GitFlow
      */
     public function releasePublish($name)
     {
-        return $this->run(self::CONTEXT_RELEASE, array(
+        return $this->run(self::CONTEXT_RELEASE, [
             self::OPERATION_PUBLISH,
             $name
-        ));
+        ]);
     }
 
     /**
@@ -283,10 +283,10 @@ class GitFlow
      */
     public function releaseTrack($name)
     {
-        return $this->run(self::CONTEXT_RELEASE, array(
+        return $this->run(self::CONTEXT_RELEASE, [
             self::OPERATION_TRACK,
             $name
-        ));
+        ]);
     }
 
     // git-flow hotfix
@@ -299,10 +299,10 @@ class GitFlow
      */
     public function hotfixList($verbose = false)
     {
-        return $this->run(self::CONTEXT_HOTFIX, array(
+        return $this->run(self::CONTEXT_HOTFIX, [
             self::OPERATION_LIST,
             $verbose ? '-v' : null
-        ));
+        ]);
     }
 
     /**
@@ -315,12 +315,12 @@ class GitFlow
      */
     public function hotfixStart($name, $fetch = false, $base = null)
     {
-        return $this->run(self::CONTEXT_HOTFIX, array(
+        return $this->run(self::CONTEXT_HOTFIX, [
             self::OPERATION_START,
             $fetch ? '-F' : null,
             $name,
             $base ? $base : null
-        ));
+        ]);
     }
 
     /**
@@ -338,7 +338,7 @@ class GitFlow
      */
     public function hotfixFinish($name, $message, $notag = true, $fetch = false, $keep = false, $push = false, $sign = false, $key = null)
     {
-        return $this->run(self::CONTEXT_HOTFIX, array(
+        return $this->run(self::CONTEXT_HOTFIX, [
             self::OPERATION_FINISH,
             $name,
             $fetch ? '-F' : null,
@@ -350,7 +350,7 @@ class GitFlow
             $message ? '-m' : null,
             $message,
             $notag ? '-n' : null
-        ));
+        ]);
     }
 
     // git-flow support
@@ -363,10 +363,10 @@ class GitFlow
      */
     public function supportList($verbose = false)
     {
-        return $this->run(self::CONTEXT_SUPPORT, array(
+        return $this->run(self::CONTEXT_SUPPORT, [
             self::OPERATION_LIST,
             $verbose ? '-v' : null
-        ));
+        ]);
     }
 
     /**
@@ -379,12 +379,12 @@ class GitFlow
      */
     public function supportStart($version, $base, $fetch = false)
     {
-        return $this->run(self::CONTEXT_SUPPORT, array(
+        return $this->run(self::CONTEXT_SUPPORT, [
             self::OPERATION_START,
             $fetch ? '-F' : null,
             $version,
             $base
-        ));
+        ]);
     }
 
     /**
@@ -414,12 +414,12 @@ class GitFlow
      * @param array $options
      * @return $this
      */
-    public function run($context, array $options = array())
+    public function run($context, array $options = [])
     {
-        $this->git->run(array_filter(array_merge(array(
+        $this->git->run(array_filter(array_merge([
             'flow',
             $context
-        ), $options)));
+        ], $options)));
 
         return $this;
     }

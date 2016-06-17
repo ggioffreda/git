@@ -312,9 +312,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
      */
     public function testRun()
     {
-        $this->assertEquals(self::$git->log(), self::$git->run(array_merge(array(
-            'log'
-        ), self::$git->getDefaults('log'))));
+        $this->assertEquals(self::$git->log(), self::$git->run(array_merge(['log'], self::$git->getDefaults('log'))));
         $history = self::$git->history();
         $historyLast = array_pop($history);
         $historySecondLast = array_pop($history);
@@ -339,7 +337,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
     public function testInitializingGitFLow()
     {
         try {
-            self::$git->run(array('flow'));
+            self::$git->run(['flow']);
         } catch (GitProcessException $gpe) {
             // if git flow is not installed, don't run this test
             return false;
@@ -464,12 +462,12 @@ class GitTest extends \PHPUnit_Framework_TestCase
      */
     public function branchesProvider()
     {
-        return array(
-            array('feature/a_new_one'),
-            array('feature/v1.2.3'),
-            array('hotfix/bug-fixed-123'),
-            array('hotfix/456')
-        );
+        return [
+            ['feature/a_new_one'],
+            ['feature/v1.2.3'],
+            ['hotfix/bug-fixed-123'],
+            ['hotfix/456']
+        ];
     }
 
     /**
@@ -477,14 +475,14 @@ class GitTest extends \PHPUnit_Framework_TestCase
      */
     public function filesProvider()
     {
-        return array(
-            array('a', true),
-            array('b with spaces', true),
-            array('c with-symbols._', true),
-            array('d', false),
-            array('e with spaces', false),
-            array('f with_symbols.-', false),
-        );
+        return [
+            ['a', true],
+            ['b with spaces', true],
+            ['c with-symbols._', true],
+            ['d', false],
+            ['e with spaces', false],
+            ['f with_symbols.-', false]
+        ];
     }
 
     /* STATIC METHODS */

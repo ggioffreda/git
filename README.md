@@ -12,9 +12,6 @@ PHP projects. The requirements are specified in the composer.json file:
  * [git](http://git-scm.com/)
  * [git-flow](https://github.com/nvie/gitflow) (required only for using the Git-Flow wrapper extension)
 
-Although the component might perfectly work on PHP 5.3 that version is abandoned and the support has ended more than two
-years ago so it's time to let go. PHP 5.4 will follow the same destiny in the next future.
-
 [![Build Status](https://travis-ci.org/ggioffreda/git.svg?branch=master)](https://travis-ci.org/ggioffreda/git)
 
 Installation

@@ -45,7 +45,7 @@ class Git
      *
      * @var array
      */
-    protected $outputs = array();
+    protected $outputs = [];
 
     /**
      * The default options for each of the base methods.
@@ -55,52 +55,52 @@ class Git
      *
      * @var array
      */
-    protected $defaults = array(
-        'add' => array(
+    protected $defaults = [
+        'add' => [
             'strategy' => null
-        ),
-        'rm' => array(
+        ],
+        'rm' => [
             'strategy' => '--cached',
             'recursive' => '-r'
-        ),
-        'mv' => array(),
-        'commit' => array(),
-        'branchAdd' => array(),
-        'branchDelete' => array(
+        ],
+        'mv' => [],
+        'commit' => [],
+        'branchAdd' => [],
+        'branchDelete' => [
             'strategy' => '-D'
-        ),
-        'branchList' => array(
+        ],
+        'branchList' => [
             'verbosity' => '-vv',
             'color' => '--no-color',
             'abbreviation' => '--no-abbrev',
             'type' => '--all'
-        ),
-        'checkout' => array(),
-        'status' => array(
+        ],
+        'checkout' => [],
+        'status' => [
             'output' => null
-        ),
-        'merge' => array(
+        ],
+        'merge' => [
             'commit' => '--no-commit',
             'strategy' => '--strategy=ours'
-        ),
-        'log' => array(
+        ],
+        'log' => [
             'limit' => '-n10'
-        ),
-        'pull' => array(),
-        'push' => array(),
-        'fetch' => array(
+        ],
+        'pull' => [],
+        'push' => [],
+        'fetch' => [
             'remotes' => '--all'
-        ),
-        'diff' => array(
+        ],
+        'diff' => [
             'color' => '--no-color'
-        ),
-        'show' => array(
+        ],
+        'show' => [
             'format' => '--format=raw',
             'color' => '--no-color',
             'abbreviation' => '--no-abbrev-commit'
-        ),
-        'config' => array()
-    );
+        ],
+        'config' => []
+    ];
 
     /**
      * Creates a new instance in the specified path that uses the provided Git command line executable.
@@ -132,7 +132,7 @@ class Git
      */
     public function getDefaults($command)
     {
-        return isset($this->defaults[$command]) ? $this->defaults[$command] : array();
+        return isset($this->defaults[$command]) ? $this->defaults[$command] : [];
     }
 
     /**
@@ -159,7 +159,7 @@ class Git
      */
     public function run($command, $callback = null)
     {
-        $builder = ProcessBuilder::create(is_array($command) ? array_filter($command) : array($command));
+        $builder = ProcessBuilder::create(is_array($command) ? array_filter($command) : [$command]);
         $builder->setPrefix($this->git);
         $builder->setWorkingDirectory($this->path);
         $builder->setTimeout(null);
@@ -196,11 +196,11 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function config($var, $val = null, $global = false, array $options = array())
+    public function config($var, $val = null, $global = false, array $options = [])
     {
-        $this->runWithDefaults('config', array_filter(array_merge($options, array(
+        $this->runWithDefaults('config', array_filter(array_merge($options, [
             $global ? '--global' : null, $var, $val
-        ))));
+        ])));
 
         return $this;
     }
@@ -214,13 +214,13 @@ class Git
     public function getConfiguration()
     {
         $output = trim($this->config('-l')->output());
-        $return = array();
+        $return = [];
 
         if ($output) {
             $lines = explode("\n", $output);
             foreach ($lines as $line)
             {
-                $matches = array();
+                $matches = [];
                 if (preg_match('/^(?P<name>[^=]+)=(?P<value>.*)$/', $line, $matches)) {
                     $return[$matches['name']] = $matches['value'];
                 } else {
@@ -239,7 +239,7 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function add($match, array $options = array())
+    public function add($match, array $options = [])
     {
         $this->runWithDefaults('add', $options, $match);
 
@@ -253,7 +253,7 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function rm($match, array $options = array())
+    public function rm($match, array $options = [])
     {
         $this->runWithDefaults('rm', $options, $match);
 
@@ -268,12 +268,12 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function mv($origin, $destination, array $options = array())
+    public function mv($origin, $destination, array $options = [])
     {
-        $this->runWithDefaults('mv', array_merge($options, array(
+        $this->runWithDefaults('mv', array_merge($options, [
             $origin,
             $destination
-        )));
+        ]));
 
         return $this;
     }
@@ -285,9 +285,9 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function commit($message, array $options = array())
+    public function commit($message, array $options = [])
     {
-        $this->runWithDefaults('commit', array_merge(array('-m', $message), $options));
+        $this->runWithDefaults('commit', array_merge(['-m', $message], $options));
 
         return $this;
     }
@@ -299,7 +299,7 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function branchAdd($branch, array $options = array())
+    public function branchAdd($branch, array $options = [])
     {
         $this->runWithDefaults('branchAdd', $options, $branch);
 
@@ -313,7 +313,7 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function branchDelete($branch, array $options = array())
+    public function branchDelete($branch, array $options = [])
     {
         $this->runWithDefaults('branchDelete', $options, $branch);
 
@@ -327,7 +327,7 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function checkout($id, array $options = array())
+    public function checkout($id, array $options = [])
     {
         $this->runWithDefaults('checkout', $options, $id);
 
@@ -340,7 +340,7 @@ class Git
      * @param array $options
      * @return mixed
      */
-    public function branchList(array $options = array())
+    public function branchList(array $options = [])
     {
         return $this->runWithDefaults('branchList', $options);
     }
@@ -353,25 +353,25 @@ class Git
      */
     public function getBranches()
     {
-        $output = trim($this->branchList(array(
+        $output = trim($this->branchList([
             'verbosity' => '-vv',
             'color' => '--no-color',
             'abbreviation' => '--no-abbrev',
             'type' => '--all'
-        )));
-        $return = array();
+        ]));
+        $return = [];
 
         if ($output) {
             $lines = explode("\n", $output);
 
             foreach ($lines as $line)
             {
-                $matches = array();
+                $matches = [];
                 if (preg_match('/^(?P<branch>[^\s]+)\s+(?:->\s+)?(?P<hash>[^\s]+)\s*(?P<message>.*)?$/', ltrim($line, " *\n"), $matches)) {
-                    $return[$matches['branch']] = array(
+                    $return[$matches['branch']] = [
                         'hash' => $matches['hash'],
                         'message' => isset($matches['message']) ? $matches['message'] : ''
-                    );
+                    ];
                 } else {
                     throw new GitParsingOutputException(sprintf('Unable to parse branch description "%s" from output "%s".', $line, $output));
                 }
@@ -388,11 +388,11 @@ class Git
      * @param array $options
      * @return string
      */
-    public function show($what, array $options = array())
+    public function show($what, array $options = [])
     {
         return $this->runWithDefaults('show', array_merge(
             $options,
-            is_array($what) ? $what : array($what)
+            is_array($what) ? $what : [$what]
         ));
     }
 
@@ -402,7 +402,7 @@ class Git
      * @param array $options
      * @return mixed
      */
-    public function status(array $options = array())
+    public function status(array $options = [])
     {
         return $this->runWithDefaults('status', $options);
     }
@@ -416,17 +416,17 @@ class Git
      */
     public function getStatuses()
     {
-        $output = trim($this->status(array(
+        $output = trim($this->status([
             'output' => '--porcelain'
-        )));
-        $return = array();
+        ]));
+        $return = [];
 
         if ($output) {
             $lines = explode("\n", $output);
 
             foreach ($lines as $line)
             {
-                $matches = array();
+                $matches = [];
                 if (preg_match('/^(?P<status>[^\s]+)\s+(?P<file>.+)$/', ltrim($line), $matches)) {
                     if (preg_match('/^".*"$/', $matches['file'])) {
                         $matches['file'] = json_decode($matches['file']);
@@ -448,7 +448,7 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function merge($branch, array $options = array())
+    public function merge($branch, array $options = [])
     {
         $this->runWithDefaults('merge', $options, $branch);
 
@@ -462,7 +462,7 @@ class Git
      * @param array $options
      * @return mixed
      */
-    public function log(array $options = array())
+    public function log(array $options = [])
     {
         return $this->runWithDefaults('log', $options);
     }
@@ -477,24 +477,24 @@ class Git
     public function getLogs($limit = 10)
     {
         try {
-            $output = trim($this->log(array(
+            $output = trim($this->log([
                 'limit' => sprintf('-n%s', (int) $limit),
                 '--oneline',
                 '--no-abbrev'
-            )));
+            ]));
         } catch (GitProcessException $e) {
             // there are no logs
-            return array();
+            return [];
         }
 
-        $return = array();
+        $return = [];
 
         if ($output) {
             $lines = explode("\n", $output);
 
             foreach ($lines as $line)
             {
-                $matches = array();
+                $matches = [];
                 if (preg_match('/^(?P<hash>[^\s]+)\s+(?P<message>.*)$/', ltrim($line), $matches)) {
                     $return[$matches['hash']] = $matches['message'];
                 } else {
@@ -513,11 +513,11 @@ class Git
      * @param array $options
      * @return mixed
      */
-    public function diff($match = null, array $options = array())
+    public function diff($match = null, array $options = [])
     {
-        return $this->runWithDefaults('diff', array_merge($options, array(
+        return $this->runWithDefaults('diff', array_merge($options, [
             $match
-        )));
+        ]));
     }
 
     /**
@@ -526,7 +526,7 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function pull(array $options = array())
+    public function pull(array $options = [])
     {
         $this->runWithDefaults('pull', $options);
 
@@ -539,7 +539,7 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function push(array $options = array())
+    public function push(array $options = [])
     {
         $this->runWithDefaults('push', $options);
 
@@ -552,7 +552,7 @@ class Git
      * @param array $options
      * @return Git
      */
-    public function fetch(array $options = array())
+    public function fetch(array $options = [])
     {
         $this->runWithDefaults('fetch', $options);
 
@@ -617,7 +617,7 @@ class Git
     {
         $git = new Git($path, $gitBin);
 
-        $git->run(array('clone', $remote, '.'));
+        $git->run(['clone', $remote, '.']);
 
         return $git;
     }
@@ -644,10 +644,10 @@ class Git
      */
     protected function logCommand($command, $output)
     {
-        $this->outputs[] = array(
+        $this->outputs[] = [
             'command' => $command,
             'output' => $output
-        );
+        ];
 
         return $output;
     }
@@ -663,7 +663,7 @@ class Git
     protected function runWithDefaults($command, $options, $argument = null)
     {
         return $this->run(array_merge(
-            $argument === null ? array(self::$commands[$command]) : array(self::$commands[$command], $argument),
+            $argument === null ? [self::$commands[$command]] : [self::$commands[$command], $argument],
             $this->defaults[$command],
             $options
         ));
@@ -674,7 +674,7 @@ class Git
      *
      * @var array
      */
-    protected static $commands = array(
+    protected static $commands = [
         'add'          => 'add',
         'rm'           => 'rm',
         'commit'       => 'commit',
@@ -692,6 +692,6 @@ class Git
         'config'       => 'config',
         'mv'           => 'mv',
         'show'         => 'show'
-    );
+    ];
 
 }
