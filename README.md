@@ -53,6 +53,15 @@ The list of shortcut and self-explanatory methods implemented for *Git*:
  * **push**, pushes the commits to the remote repository;
  * **pull**, pulls the commits from the remote repository;
  * **fetch**, fetches the remote branches;
+ * **remoteAdd**, adds a remote;
+ * **remoteRename**, renames a remote;
+ * **remoteRemove**, removes a remote;
+ * **remoteSetHead**, sets the HEAD for a remote;
+ * **remoteSetBranches**, set the branches for a remote;
+ * **remoteGetUrl**, get the URL of a remote;
+ * **remoteSetUrl**, set the URL of a remote;
+ * **remoteShow**, shows information of a remote;
+ * **remotePrune**, prunes a remote;
  * **flow**, access the git-flow wrapper extension.
 
 List of other methods provided for *Git*:

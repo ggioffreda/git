@@ -99,7 +99,12 @@ class Git
             'color' => '--no-color',
             'abbreviation' => '--no-abbrev-commit'
         ],
-        'config' => []
+        'config' => [],
+        'remoteAdd' => [],
+        'remoteSetHead' => [
+            'auto' => '--auto'
+        ],
+        'remoteSetBranches' => [],
     ];
 
     /**
@@ -560,6 +565,147 @@ class Git
     }
 
     /**
+     * Adds the given remote
+     *
+     * @param string $name
+     * @param string $url
+     * @param array $options
+     * @return Git
+     */
+    public function remoteAdd($name, $url, array $options = [])
+    {
+        $this->runWithDefaults('remoteAdd', $options, ['add', $name, $url]);
+
+        return $this;
+    }
+
+    /**
+     * Rename the given remote.
+     *
+     * @param string $oldName
+     * @param string $newName
+     * @return Git
+     */
+    public function remoteRename($oldName, $newName)
+    {
+        $this->run(['remote', 'rename', $oldName, $newName]);
+
+        return $this;
+    }
+
+    /**
+     * Removes the remote.
+     *
+     * @param string $name
+     * @return Git
+     */
+    public function remoteRemove($name)
+    {
+        $this->run(['remote', 'remove', $name]);
+
+        return $this;
+    }
+
+    /**
+     * Set the HEAD for the given repository.
+     *
+     * @param string $remoteName
+     * @param array $options
+     * @return Git
+     */
+    public function remoteSetHead($remoteName, array $options = [])
+    {
+        $this->runWithDefaults('remoteSetHead', $options, ['set-head', $remoteName]);
+
+        return $this;
+    }
+
+    /**
+     * Set the remote branches or adds them is the last parameter is set to `true`.
+     *
+     * @param string $name
+     * @param string $branch
+     * @param bool $add
+     * @return Git
+     */
+    public function remoteSetBranches($name, $branch, $add = false)
+    {
+        $arguments = array_merge(['remote', 'set-branches', $name], $add ? ['--add'] : [], (array) $branch);
+
+        $this->run($arguments);
+
+        return $this;
+    }
+
+    /**
+     * Gets the remote URL or all of them if the last parameter is set to `true`. Setting the second parameter to `true`
+     * will return the push URL instead of the fetch (default behaviour).
+     *
+     * @param string $name
+     * @param bool $push
+     * @param bool $all
+     * @return string
+     */
+    public function remoteGetUrl($name, $push = false, $all = false)
+    {
+        $arguments = ['remote', 'get-url', $name];
+        if ($push) {
+            array_push($arguments, '--push');
+        }
+        if ($all) {
+            array_push($arguments, '--all');
+        }
+
+        return $this->run($arguments);
+    }
+
+    /**
+     * Set the remote URL, the push one if the last parameter is set to `true`.
+     *
+     * @param string $name
+     * @param string $url
+     * @param bool $push
+     * @return Git
+     */
+    public function remoteSetUrl($name, $url, $push = false)
+    {
+        $arguments = ['remote', 'set-url', $name, $url];
+        if ($push) {
+            array_push($arguments, '--push');
+        }
+
+        $this->run($arguments);
+
+        return $this;
+    }
+
+    /**
+     * Show information about the given remote.
+     *
+     * @param string|null $name
+     * @param bool $queryRemote
+     * @return string
+     */
+    public function remoteShow($name = null, $queryRemote = false)
+    {
+        return $this->run(array_merge(['remote', 'show'], $name ? [$name] : [], $queryRemote ? ['-n'] : []));
+    }
+
+    /**
+     * Prune the remote.
+     *
+     * @param string $name
+     * @param bool $dryRun
+     * @return Git
+     */
+    public function remotePrune($name, $dryRun = false)
+    {
+        $this->run(array_merge(['remote', 'prune', $name], $dryRun ? ['--dry-run'] : []));
+
+        return $this;
+    }
+
+    /**
      * Returns the output of the last command executed, if available. It can be null.
      *
      * @return string|null
@@ -657,13 +803,14 @@ class Git
      *
      * @param $command
      * @param $options
-     * @param null $argument
+     * @param string|array|null $argument
      * @return mixed
      */
     protected function runWithDefaults($command, $options, $argument = null)
     {
         return $this->run(array_merge(
-            $argument === null ? [self::$commands[$command]] : [self::$commands[$command], $argument],
+            [self::$commands[$command]],
+            $argument === null ? [] : (array) $argument,
             $this->defaults[$command],
             $options
         ));
@@ -691,7 +838,8 @@ class Git
         'diff'         => 'diff',
         'config'       => 'config',
         'mv'           => 'mv',
-        'show'         => 'show'
+        'show'         => 'show',
+        'remoteAdd'    => 'remote',
     ];
 
 }

@@ -33,11 +33,58 @@ class GitTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreation()
     {
-        $path = sprintf('%s/%s%s', sys_get_temp_dir(), 'git-client-test-', sha1(mt_rand().mt_rand().time()));
+        $path = self::buildPath();
         self::getFilesystem()->mkdir($path);
         self::$git = Git::create($path);
         $this->assertEquals('Gioffreda\\Component\\Git\\Git', get_class(self::$git));
         $this->assertEquals($path, self::$git->getPath());
+    }
+
+    /**
+     * @covers ::cloneRemote
+     * @dataProvider remotesProvider
+     */
+    public function testCloning($url)
+    {
+        $path = self::buildPath();
+        self::getFilesystem()->mkdir($path);
+        $git = Git::cloneRemote($url, $path);
+        $this->assertEquals('Gioffreda\\Component\\Git\\Git', get_class($git));
+        $this->assertEquals($path, $git->getPath());
+    }
+
+    /**
+     * @covers ::remoteAdd
+     * @covers ::remoteRename
+     * @covers ::remoteRemove
+     * @covers ::remoteSetUrl
+     * @covers ::remoteGetUrl
+     * @covers ::remoteShow
+     * @depends testCloning
+     * @expectedException \Gioffreda\Component\Git\Exception\GitProcessException
+     * @dataProvider remotesProvider
+     */
+    public function testRemote($url, $name)
+    {
+        $path = self::buildPath();
+        self::getFilesystem()->mkdir($path);
+        $git = Git::cloneRemote($url, $path);
+        $this->assertStringStartsWith('origin', $git->remoteShow());
+        $this->assertContains($name, $git->remoteShow('origin'));
+        $this->assertContains('origin', $git->remoteShow('origin'));
+        $this->assertStringStartsWith($url, $git->remoteGetUrl('origin'));
+
+        $brokenUrl = "$url.test";
+        $git->remoteAdd('broken', $brokenUrl);
+        $this->assertStringStartsWith($brokenUrl, $git->remoteGetUrl('broken'));
+        $git->remoteSetUrl('broken', $url);
+        $this->assertStringStartsWith($url, $git->remoteGetUrl('broken'));
+        $git->remoteRename('broken', 'fixed');
+        $this->assertContains($name, $git->remoteShow('fixed'));
+        $this->assertContains('fixed', $git->remoteShow('fixed'));
+        $git->remoteRemove('fixed');
+        // the following must throw an exception because the 'fixed' origin is gone
+        $git->remoteShow('fixed');
     }
 
     /**
@@ -485,6 +532,16 @@ class GitTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
+    public function remotesProvider()
+    {
+        return [
+            ['https://github.com/ggioffreda/git.git', 'ggioffreda/git.git']
+        ];
+    }
+
     /* STATIC METHODS */
 
     /**
@@ -497,6 +554,14 @@ class GitTest extends \PHPUnit_Framework_TestCase
         }
 
         return self::$filesystem;
+    }
+
+    /**
+     * @return string
+     */
+    public static function buildPath()
+    {
+        return sprintf('%s/%s%s', sys_get_temp_dir(), 'git-client-test-', sha1(mt_rand().mt_rand().time()));
     }
 
     public static function tearDownAfterClass()
