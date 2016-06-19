@@ -1,7 +1,7 @@
 {
     "name": "ggioffreda/git",
     "description": "An advanced PHP wrapper for git and git-flow.",
-    "license": "MIT or GPL v2 or GPL v3",
+    "license": "MIT",
     "authors": [
         {
             "name": "Giovanni Gioffreda",
@@ -10,16 +10,15 @@
     ],
     "require": {
         "php": ">=5.4",
-        "symfony/process": ">=2.4"
+        "symfony/process": ">=2.4,<4.0"
     },
     "require-dev": {
-        "symfony/filesystem": ">=2.4"
+        "symfony/filesystem": ">=2.4,<4.0"
     },
     "autoload": {
         "psr-4": {
             "Gioffreda\\Component\\Git\\": "src/",
             "Gioffreda\\Component\\Git\\Tests\\": "tests/"
         }
-    },
-    "target-dir": "Gioffreda/Component/Git"
+    }
 }
