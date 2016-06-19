@@ -1,5 +1,12 @@
 language: php
 
+env:
+  - SYMFONY_VERSION="~2.4"
+  - SYMFONY_VERSION="~2.7"
+  - SYMFONY_VERSION="~2.8"
+  - SYMFONY_VERSION="~3.0"
+  - SYMFONY_VERSION="~3.1"
+
 php:
   - 5.4
   - 5.5
@@ -8,3 +15,5 @@ php:
 
 before_script:
     - COMPOSER_ROOT_VERSION=dev-master composer install
+    - composer require symfony/process:${SYMFONY_VERSION}
+    - composer require symfony/filesystem:${SYMFONY_VERSION}
