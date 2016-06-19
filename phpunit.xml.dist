@@ -15,7 +15,7 @@
 
     <testsuites>
         <testsuite name="Git Component Test Suite">
-            <directory>./Tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 
@@ -23,8 +23,8 @@
         <whitelist>
             <directory>./</directory>
             <exclude>
-                <directory>./Tests</directory>
-                <directory>./Exception</directory>
+                <directory>./tests</directory>
+                <directory>./src/Exception</directory>
             </exclude>
         </whitelist>
     </filter>

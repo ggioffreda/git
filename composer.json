@@ -16,7 +16,10 @@
         "symfony/filesystem": ">=2.4"
     },
     "autoload": {
-        "psr-0": { "Gioffreda\\Component\\Git\\": "" }
+        "psr-4": {
+            "Gioffreda\\Component\\Git\\": "src/",
+            "Gioffreda\\Component\\Git\\Tests\\": "tests/"
+        }
     },
     "target-dir": "Gioffreda/Component/Git"
 }

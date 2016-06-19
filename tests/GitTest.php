@@ -5,7 +5,6 @@ namespace Gioffreda\Component\Git\Tests;
 use Gioffreda\Component\Git\Exception\GitException;
 use Gioffreda\Component\Git\Exception\GitProcessException;
 use Gioffreda\Component\Git\Git;
-use Gioffreda\Component\Git\GitFlow;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
