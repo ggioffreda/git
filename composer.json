@@ -1,7 +1,7 @@
 {
     "name": "ggioffreda/git",
     "description": "An advanced PHP wrapper for git and git-flow.",
-    "license": "GPL v2 or above",
+    "license": "MIT or GPL v2 or GPL v3",
     "authors": [
         {
             "name": "Giovanni Gioffreda",
