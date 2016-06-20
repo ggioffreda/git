@@ -7,8 +7,8 @@ This tool is built using the Symfony Process Component (https://github.com/symfo
 PHP projects. The requirements are specified in the composer.json file:
 
  * [PHP](http://www.php.net/) version >=5.4
- * [symfony/Process](http://symfony.com/doc/current/components/process.html) version >= 2.4
- * [symfony/Filesystem](http://symfony.com/doc/current/components/filesystem.html) version >= 2.2 (only for running the tests in development environment)
+ * [symfony/process](http://symfony.com/doc/current/components/process.html) version >= 2.4
+ * [symfony/filesystem](http://symfony.com/doc/current/components/filesystem.html) version >= 2.2 (only for running the tests in development environment)
  * [git](http://git-scm.com/)
  * [git-flow](https://github.com/nvie/gitflow) (required only for using the Git-Flow wrapper extension)
 
