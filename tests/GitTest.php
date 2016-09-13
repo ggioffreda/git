@@ -40,6 +40,8 @@ class GitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $url
+     *
      * @covers ::cloneRemote
      * @dataProvider remotesProvider
      */
@@ -53,6 +55,9 @@ class GitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $url
+     * @param $name
+     *
      * @covers ::remoteAdd
      * @covers ::remoteRename
      * @covers ::remoteRemove
@@ -117,13 +122,16 @@ class GitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $file
+     * @param $remove
+     *
      * @covers ::getPath
      * @covers ::output
      * @covers ::history
      * @depends testInitialization
      * @dataProvider filesProvider
      */
-    public function testCreatingFIles($file, $remove)
+    public function testCreatingFiles($file, $remove)
     {
         $counter = count(self::$git->history());
         self::getFilesystem()->touch(sprintf('%s/%s', self::$git->getPath(), $file));
@@ -132,12 +140,15 @@ class GitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $file
+     * @param $remove
+     *
      * @covers ::add
      * @covers ::rm
      * @covers ::getPath
      * @covers ::output
      * @covers ::history
-     * @depends testCreatingFIles
+     * @depends testCreatingFiles
      * @dataProvider filesProvider
      */
     public function testAddingAndRemoving($file, $remove)
@@ -216,6 +227,8 @@ class GitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $branch
+     *
      * @covers ::branchAdd
      * @covers ::output
      * @depends testBranching
@@ -227,6 +240,8 @@ class GitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $branch
+     *
      * @covers ::checkout
      * @covers ::output
      * @depends testAddBranch
@@ -260,6 +275,9 @@ class GitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $file
+     * @param $remove
+     *
      * @covers ::getStatuses
      * @depends testDumpingStatus
      * @dataProvider filesProvider
@@ -285,6 +303,8 @@ class GitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $branch
+     *
      * @covers ::branchList
      * @covers ::getBranches
      * @depends testListingBranches
@@ -294,14 +314,18 @@ class GitTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertContains($branch, self::$git->branchList());
         $this->assertArrayHasKey($branch, $branches = self::$git->getBranches());
-        foreach ($branches as $b => $info) if ($branch != $b)
-        {
-            $this->assertEquals($branches[$branch]['hash'], $info['hash']);
-            $this->assertEquals($branches[$branch]['message'], $info['message']);
+        foreach ($branches as $b => $info) {
+            if ($branch != $b) {
+                $this->assertEquals($branches[$branch]['hash'], $info['hash']);
+                $this->assertEquals($branches[$branch]['message'], $info['message']);
+            }
         }
     }
 
     /**
+     * @param $file
+     * @param $remove
+     *
      * @covers ::getStatuses
      * @covers ::getPath
      * @covers ::diff
@@ -397,16 +421,21 @@ class GitTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('support/', self::$git->flow()->output());
 
         // clearing test branches
-        foreach ($this->branchesProvider() as $branch) try {
-            self::$git->branchDelete($branch[0]);
-        } catch (GitException $e) {
-            // do nothing
+        foreach ($this->branchesProvider() as $branch) {
+            try {
+                self::$git->branchDelete($branch[0]);
+            } catch (GitException $e) {
+                // do nothing
+            }
         }
 
         return true;
     }
 
     /**
+     * @param $flowInstalled
+     * @return boolean
+     *
      * @covers \Gioffreda\Component\Git\GitFlow::featureStart
      * @covers \Gioffreda\Component\Git\GitFlow::featureList
      * @covers \Gioffreda\Component\Git\GitFlow::featureFinish
@@ -422,13 +451,17 @@ class GitTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('feature/test1', self::$git->status());
         self::$filesystem->touch(sprintf('%s/%s', self::$git->getPath(), sha1('feature/test1')));
         $this->assertContains('* test1', self::$git->flow()->featureList()->output());
-        $this->assertContains('Summary of actions', self::$git->add('.')->commit('Lorem ipsum feature updated')->flow()->featureFinish('test1')->output());
+        $this->assertContains('Summary of actions', self::$git->add('.')->commit('Lorem ipsum feature updated')
+            ->flow()->featureFinish('test1')->output());
         $this->assertContains('develop', self::$git->status());
 
         return true;
     }
 
     /**
+     * @param $flowInstalled
+     * @return boolean
+     *
      * @covers \Gioffreda\Component\Git\GitFlow::hotfixStart
      * @covers \Gioffreda\Component\Git\GitFlow::hotfixList
      * @covers \Gioffreda\Component\Git\GitFlow::hotfixFinish
@@ -444,13 +477,17 @@ class GitTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('hotfix/test1', self::$git->status());
         self::$filesystem->touch(sprintf('%s/%s', self::$git->getPath(), sha1('hotfix/test1')));
         $this->assertContains('* test1', self::$git->flow()->hotfixList()->output());
-        $this->assertContains('Summary of actions', self::$git->add('.')->commit('Lorem ipsum hotfix updated')->flow()->hotfixFinish('test1', 'tag')->output());
+        $this->assertContains('Summary of actions', self::$git->add('.')->commit('Lorem ipsum hotfix updated')->flow()
+            ->hotfixFinish('test1', 'tag')->output());
         $this->assertContains('develop', self::$git->status());
 
         return true;
     }
 
     /**
+     * @param $flowInstalled
+     * @return boolean
+     *
      * @covers \Gioffreda\Component\Git\GitFlow::releaseStart
      * @covers \Gioffreda\Component\Git\GitFlow::releaseList
      * @covers \Gioffreda\Component\Git\GitFlow::releaseFinish
@@ -466,13 +503,17 @@ class GitTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('release/t1', self::$git->status());
         self::$filesystem->touch(sprintf('%s/%s', self::$git->getPath(), sha1('release/t1')));
         $this->assertContains('* t1', self::$git->flow()->releaseList()->output());
-        $this->assertContains('Summary of actions', self::$git->add('.')->commit('Lorem ipsum release updated')->flow()->releaseFinish('t1', 'tag')->output());
+        $this->assertContains('Summary of actions', self::$git->add('.')->commit('Lorem ipsum release updated')->flow()
+            ->releaseFinish('t1', 'tag')->output());
         $this->assertContains('develop', self::$git->status());
 
         return true;
     }
 
     /**
+     * @param $flowInstalled
+     * @return boolean
+     *
      * @covers \Gioffreda\Component\Git\GitFlow::supportStart
      * @covers \Gioffreda\Component\Git\GitFlow::supportList
      * @depends testGitFlowHotfix
@@ -567,5 +608,4 @@ class GitTest extends \PHPUnit_Framework_TestCase
     {
         self::getFilesystem()->remove(self::$git->getPath());
     }
-
 }

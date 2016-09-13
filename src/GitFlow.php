@@ -244,8 +244,16 @@ class GitFlow
      * @param null $key use the given GPG-key for the digital signature (implies $sign is true)
      * @return $this
      */
-    public function releaseFinish($version, $message, $notag = true, $fetch = false, $keep = false, $push = false, $sign = false, $key = null)
-    {
+    public function releaseFinish(
+        $version,
+        $message,
+        $notag = true,
+        $fetch = false,
+        $keep = false,
+        $push = false,
+        $sign = false,
+        $key = null
+    ) {
         return $this->run(self::CONTEXT_RELEASE, [
             self::OPERATION_FINISH,
             $version,
@@ -336,8 +344,16 @@ class GitFlow
      * @param null $key use the given GPG-key for the digital signature (implies $sign is true)
      * @return $this
      */
-    public function hotfixFinish($name, $message, $notag = true, $fetch = false, $keep = false, $push = false, $sign = false, $key = null)
-    {
+    public function hotfixFinish(
+        $name,
+        $message,
+        $notag = true,
+        $fetch = false,
+        $keep = false,
+        $push = false,
+        $sign = false,
+        $key = null
+    ) {
         return $this->run(self::CONTEXT_HOTFIX, [
             self::OPERATION_FINISH,
             $name,
@@ -454,5 +470,4 @@ class GitFlow
     {
         return $this->git;
     }
-
 }

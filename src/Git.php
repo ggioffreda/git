@@ -223,13 +223,14 @@ class Git
 
         if ($output) {
             $lines = explode("\n", $output);
-            foreach ($lines as $line)
-            {
+            foreach ($lines as $line) {
                 $matches = [];
                 if (preg_match('/^(?P<name>[^=]+)=(?P<value>.*)$/', $line, $matches)) {
                     $return[$matches['name']] = $matches['value'];
                 } else {
-                    throw new GitParsingOutputException(sprintf('Unable to parse configuration "%s" from output "%s".', $line, $output));
+                    throw new GitParsingOutputException(
+                        sprintf('Unable to parse configuration "%s" from output "%s".', $line, $output)
+                    );
                 }
             }
         }
@@ -369,16 +370,21 @@ class Git
         if ($output) {
             $lines = explode("\n", $output);
 
-            foreach ($lines as $line)
-            {
+            foreach ($lines as $line) {
                 $matches = [];
-                if (preg_match('/^(?P<branch>[^\s]+)\s+(?:->\s+)?(?P<hash>[^\s]+)\s*(?P<message>.*)?$/', ltrim($line, " *\n"), $matches)) {
+                if (preg_match(
+                    '/^(?P<branch>[^\s]+)\s+(?:->\s+)?(?P<hash>[^\s]+)\s*(?P<message>.*)?$/',
+                    ltrim($line, " *\n"),
+                    $matches
+                )) {
                     $return[$matches['branch']] = [
                         'hash' => $matches['hash'],
                         'message' => isset($matches['message']) ? $matches['message'] : ''
                     ];
                 } else {
-                    throw new GitParsingOutputException(sprintf('Unable to parse branch description "%s" from output "%s".', $line, $output));
+                    throw new GitParsingOutputException(
+                        sprintf('Unable to parse branch description "%s" from output "%s".', $line, $output)
+                    );
                 }
             }
         }
@@ -429,8 +435,7 @@ class Git
         if ($output) {
             $lines = explode("\n", $output);
 
-            foreach ($lines as $line)
-            {
+            foreach ($lines as $line) {
                 $matches = [];
                 if (preg_match('/^(?P<status>[^\s]+)\s+(?P<file>.+)$/', ltrim($line), $matches)) {
                     if (preg_match('/^".*"$/', $matches['file'])) {
@@ -438,7 +443,9 @@ class Git
                     }
                     $return[$matches['file']] = $matches['status'];
                 } else {
-                    throw new GitParsingOutputException(sprintf('Unable to parse status description "%s" from output "%s".', $line, $output));
+                    throw new GitParsingOutputException(
+                        sprintf('Unable to parse status description "%s" from output "%s".', $line, $output)
+                    );
                 }
             }
         }
@@ -497,8 +504,7 @@ class Git
         if ($output) {
             $lines = explode("\n", $output);
 
-            foreach ($lines as $line)
-            {
+            foreach ($lines as $line) {
                 $matches = [];
                 if (preg_match('/^(?P<hash>[^\s]+)\s+(?P<message>.*)$/', ltrim($line), $matches)) {
                     $return[$matches['hash']] = $matches['message'];
@@ -841,5 +847,4 @@ class Git
         'show'         => 'show',
         'remoteAdd'    => 'remote',
     ];
-
 }
