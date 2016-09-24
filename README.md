@@ -124,6 +124,9 @@ exception.
 Example
 -------
 
+For a real life example check this out: [Git-Guardian](https://github.com/ggioffreda/git-guardian). It's a command line
+interface for backing up locally all your remote repositories from either GitHub or [BitBucket](https://bitbucket.org/).
+
 The following example shows how to use the component. All non getter methods not used to read properties or command
 output implement a fluent interface to improve readability:
 
