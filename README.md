@@ -159,7 +159,7 @@ class MyJob
             // commits the changes into the master branch
             ->commit('Merged the changes into master.')
             // pushes the changes to the remote repository using a custom command line
-            ->run(array('push', '--all'))
+            ->run(['push', '--all'])
         ;
 
         // or you can use a local one even if not initialized yet
