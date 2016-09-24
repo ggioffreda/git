@@ -47,6 +47,34 @@ class Git
      */
     protected $outputs = [];
 
+    const OPERATION_INIT = 'init';
+    const OPERATION_ADD = 'add';
+    const OPERATION_REMOVE = 'rm';
+    const OPERATION_MOVE = 'mv';
+    const OPERATION_COMMIT = 'commit';
+    const OPERATION_BRANCH_ADD = 'branchAdd';
+    const OPERATION_BRANCH_DELETE = 'branchDelete';
+    const OPERATION_BRANCH_LIST = 'branchList';
+    const OPERATION_CHECKOUT = 'checkout';
+    const OPERATION_STATUS = 'status';
+    const OPERATION_MERGE = 'merge';
+    const OPERATION_LOG = 'log';
+    const OPERATION_PULL = 'pull';
+    const OPERATION_PUSH = 'push';
+    const OPERATION_FETCH = 'fetch';
+    const OPERATION_DIFF = 'diff';
+    const OPERATION_SHOW = 'show';
+    const OPERATION_CONFIG = 'config';
+    const OPERATION_REMOTE_ADD = 'remoteAdd';
+    const OPERATION_REMOTE_RENAME = 'remoteRename';
+    const OPERATION_REMOTE_REMOVE = 'remoteRemove';
+    const OPERATION_REMOTE_SET_HEAD = 'remoteSetHead';
+    const OPERATION_REMOTE_SET_BRANCHES = 'remoteSetBranches';
+    const OPERATION_REMOTE_GET_URL = 'remoteGetUrl';
+    const OPERATION_REMOTE_SET_URL = 'remoteSetUrl';
+    const OPERATION_REMOTE_SHOW = 'remoteShow';
+    const OPERATION_REMOTE_PRUNE = 'remotePrune';
+
     /**
      * The default options for each of the base methods.
      *
@@ -56,55 +84,46 @@ class Git
      * @var array
      */
     protected $defaults = [
-        'add' => [
+        self::OPERATION_ADD => [
             'strategy' => null
         ],
-        'rm' => [
+        self::OPERATION_REMOVE => [
             'strategy' => '--cached',
             'recursive' => '-r'
         ],
-        'mv' => [],
-        'commit' => [],
-        'branchAdd' => [],
-        'branchDelete' => [
+        self::OPERATION_BRANCH_DELETE => [
             'strategy' => '-D'
         ],
-        'branchList' => [
+        self::OPERATION_BRANCH_LIST => [
             'verbosity' => '-vv',
             'color' => '--no-color',
             'abbreviation' => '--no-abbrev',
             'type' => '--all'
         ],
-        'checkout' => [],
-        'status' => [
+        self::OPERATION_STATUS => [
             'output' => null
         ],
-        'merge' => [
+        self::OPERATION_MERGE => [
             'commit' => '--no-commit',
             'strategy' => '--strategy=ours'
         ],
-        'log' => [
+        self::OPERATION_LOG => [
             'limit' => '-n10'
         ],
-        'pull' => [],
-        'push' => [],
-        'fetch' => [
+        self::OPERATION_FETCH => [
             'remotes' => '--all'
         ],
-        'diff' => [
+        self::OPERATION_DIFF => [
             'color' => '--no-color'
         ],
-        'show' => [
+        self::OPERATION_SHOW => [
             'format' => '--format=raw',
             'color' => '--no-color',
             'abbreviation' => '--no-abbrev-commit'
         ],
-        'config' => [],
-        'remoteAdd' => [],
-        'remoteSetHead' => [
+        self::OPERATION_REMOTE_SET_HEAD => [
             'auto' => '--auto'
         ],
-        'remoteSetBranches' => [],
     ];
 
     /**
@@ -186,7 +205,7 @@ class Git
     public function init()
     {
         if (!self::isInitialized($this->path)) {
-            $this->run('init');
+            $this->runWithDefaults(self::OPERATION_INIT, []);
         }
 
         return $this;
@@ -203,7 +222,7 @@ class Git
      */
     public function config($var, $val = null, $global = false, array $options = [])
     {
-        $this->runWithDefaults('config', array_filter(array_merge($options, [
+        $this->runWithDefaults(self::OPERATION_CONFIG, array_filter(array_merge($options, [
             $global ? '--global' : null, $var, $val
         ])));
 
@@ -247,7 +266,7 @@ class Git
      */
     public function add($match, array $options = [])
     {
-        $this->runWithDefaults('add', $options, $match);
+        $this->runWithDefaults(self::OPERATION_ADD, $options, $match);
 
         return $this;
     }
@@ -261,7 +280,7 @@ class Git
      */
     public function rm($match, array $options = [])
     {
-        $this->runWithDefaults('rm', $options, $match);
+        $this->runWithDefaults(self::OPERATION_REMOVE, $options, $match);
 
         return $this;
     }
@@ -276,7 +295,7 @@ class Git
      */
     public function mv($origin, $destination, array $options = [])
     {
-        $this->runWithDefaults('mv', array_merge($options, [
+        $this->runWithDefaults(self::OPERATION_MOVE, array_merge($options, [
             $origin,
             $destination
         ]));
@@ -293,7 +312,7 @@ class Git
      */
     public function commit($message, array $options = [])
     {
-        $this->runWithDefaults('commit', array_merge(['-m', $message], $options));
+        $this->runWithDefaults(self::OPERATION_COMMIT, array_merge(['-m', $message], $options));
 
         return $this;
     }
@@ -307,7 +326,7 @@ class Git
      */
     public function branchAdd($branch, array $options = [])
     {
-        $this->runWithDefaults('branchAdd', $options, $branch);
+        $this->runWithDefaults(self::OPERATION_BRANCH_ADD, $options, $branch);
 
         return $this;
     }
@@ -321,7 +340,7 @@ class Git
      */
     public function branchDelete($branch, array $options = [])
     {
-        $this->runWithDefaults('branchDelete', $options, $branch);
+        $this->runWithDefaults(self::OPERATION_BRANCH_DELETE, $options, $branch);
 
         return $this;
     }
@@ -335,7 +354,7 @@ class Git
      */
     public function checkout($id, array $options = [])
     {
-        $this->runWithDefaults('checkout', $options, $id);
+        $this->runWithDefaults(self::OPERATION_CHECKOUT, $options, $id);
 
         return $this;
     }
@@ -348,7 +367,7 @@ class Git
      */
     public function branchList(array $options = [])
     {
-        return $this->runWithDefaults('branchList', $options);
+        return $this->runWithDefaults(self::OPERATION_BRANCH_LIST, $options);
     }
 
     /**
@@ -401,7 +420,7 @@ class Git
      */
     public function show($what, array $options = [])
     {
-        return $this->runWithDefaults('show', array_merge(
+        return $this->runWithDefaults(self::OPERATION_SHOW, array_merge(
             $options,
             is_array($what) ? $what : [$what]
         ));
@@ -415,7 +434,7 @@ class Git
      */
     public function status(array $options = [])
     {
-        return $this->runWithDefaults('status', $options);
+        return $this->runWithDefaults(self::OPERATION_STATUS, $options);
     }
 
     /**
@@ -462,7 +481,7 @@ class Git
      */
     public function merge($branch, array $options = [])
     {
-        $this->runWithDefaults('merge', $options, $branch);
+        $this->runWithDefaults(self::OPERATION_MERGE, $options, $branch);
 
         return $this;
     }
@@ -476,7 +495,7 @@ class Git
      */
     public function log(array $options = [])
     {
-        return $this->runWithDefaults('log', $options);
+        return $this->runWithDefaults(self::OPERATION_LOG, $options);
     }
 
     /**
@@ -526,7 +545,7 @@ class Git
      */
     public function diff($match = null, array $options = [])
     {
-        return $this->runWithDefaults('diff', array_merge($options, [
+        return $this->runWithDefaults(self::OPERATION_DIFF, array_merge($options, [
             $match
         ]));
     }
@@ -539,7 +558,7 @@ class Git
      */
     public function pull(array $options = [])
     {
-        $this->runWithDefaults('pull', $options);
+        $this->runWithDefaults(self::OPERATION_PULL, $options);
 
         return $this;
     }
@@ -552,7 +571,7 @@ class Git
      */
     public function push(array $options = [])
     {
-        $this->runWithDefaults('push', $options);
+        $this->runWithDefaults(self::OPERATION_PUSH, $options);
 
         return $this;
     }
@@ -565,7 +584,7 @@ class Git
      */
     public function fetch(array $options = [])
     {
-        $this->runWithDefaults('fetch', $options);
+        $this->runWithDefaults(self::OPERATION_FETCH, $options);
 
         return $this;
     }
@@ -580,7 +599,7 @@ class Git
      */
     public function remoteAdd($name, $url, array $options = [])
     {
-        $this->runWithDefaults('remoteAdd', $options, ['add', $name, $url]);
+        $this->runWithDefaults(self::OPERATION_REMOTE_ADD, $options, ['add', $name, $url]);
 
         return $this;
     }
@@ -594,7 +613,7 @@ class Git
      */
     public function remoteRename($oldName, $newName)
     {
-        $this->run(['remote', 'rename', $oldName, $newName]);
+        $this->runWithDefaults(self::OPERATION_REMOTE_RENAME, [], ['rename', $oldName, $newName]);
 
         return $this;
     }
@@ -607,7 +626,7 @@ class Git
      */
     public function remoteRemove($name)
     {
-        $this->run(['remote', 'remove', $name]);
+        $this->runWithDefaults(self::OPERATION_REMOTE_REMOVE, [], ['remove', $name]);
 
         return $this;
     }
@@ -621,7 +640,7 @@ class Git
      */
     public function remoteSetHead($remoteName, array $options = [])
     {
-        $this->runWithDefaults('remoteSetHead', $options, ['set-head', $remoteName]);
+        $this->runWithDefaults(self::OPERATION_REMOTE_SET_HEAD, $options, ['set-head', $remoteName]);
 
         return $this;
     }
@@ -636,9 +655,11 @@ class Git
      */
     public function remoteSetBranches($name, $branch, $add = false)
     {
-        $arguments = array_merge(['remote', 'set-branches', $name], $add ? ['--add'] : [], (array) $branch);
-
-        $this->run($arguments);
+        $this->runWithDefaults(
+            self::OPERATION_REMOTE_SET_BRANCHES,
+            $add ? ['--add'] : [],
+            array_merge(['set-branches', $name], (array) $branch)
+        );
 
         return $this;
     }
@@ -654,7 +675,7 @@ class Git
      */
     public function remoteGetUrl($name, $push = false, $all = false)
     {
-        $arguments = ['remote', 'get-url', $name];
+        $arguments = ['get-url', $name];
         if ($push) {
             array_push($arguments, '--push');
         }
@@ -662,7 +683,7 @@ class Git
             array_push($arguments, '--all');
         }
 
-        return $this->run($arguments);
+        return $this->runWithDefaults(self::OPERATION_REMOTE_GET_URL, [], $arguments);
     }
 
     /**
@@ -675,12 +696,12 @@ class Git
      */
     public function remoteSetUrl($name, $url, $push = false)
     {
-        $arguments = ['remote', 'set-url', $name, $url];
+        $arguments = ['set-url', $name, $url];
         if ($push) {
             array_push($arguments, '--push');
         }
 
-        $this->run($arguments);
+        $this->runWithDefaults(self::OPERATION_REMOTE_SET_URL, [], $arguments);
 
         return $this;
     }
@@ -694,7 +715,11 @@ class Git
      */
     public function remoteShow($name = null, $queryRemote = false)
     {
-        return $this->run(array_merge(['remote', 'show'], $name ? [$name] : [], $queryRemote ? ['-n'] : []));
+        return $this->runWithDefaults(
+            self::OPERATION_REMOTE_SHOW,
+            [],
+            array_merge(['show'], $name ? [$name] : [], $queryRemote ? ['-n'] : [])
+        );
     }
 
     /**
@@ -706,7 +731,11 @@ class Git
      */
     public function remotePrune($name, $dryRun = false)
     {
-        $this->run(array_merge(['remote', 'prune', $name], $dryRun ? ['--dry-run'] : []));
+        $this->runWithDefaults(
+            self::OPERATION_REMOTE_PRUNE,
+            [],
+            array_merge(['prune', $name], $dryRun ? ['--dry-run'] : [])
+        );
 
         return $this;
     }
@@ -817,7 +846,7 @@ class Git
         return $this->run(array_merge(
             [self::$commands[$command]],
             $argument === null ? [] : (array) $argument,
-            $this->defaults[$command],
+            $this->getDefaults($command),
             $options
         ));
     }
@@ -828,23 +857,32 @@ class Git
      * @var array
      */
     protected static $commands = [
-        'add'          => 'add',
-        'rm'           => 'rm',
-        'commit'       => 'commit',
-        'branchAdd'    => 'branch',
-        'branchDelete' => 'branch',
-        'branchList'   => 'branch',
-        'checkout'     => 'checkout',
-        'status'       => 'status',
-        'merge'        => 'merge',
-        'log'          => 'log',
-        'pull'         => 'pull',
-        'push'         => 'push',
-        'fetch'        => 'fetch',
-        'diff'         => 'diff',
-        'config'       => 'config',
-        'mv'           => 'mv',
-        'show'         => 'show',
-        'remoteAdd'    => 'remote',
+        self::OPERATION_INIT => 'init',
+        self::OPERATION_ADD => 'add',
+        self::OPERATION_REMOVE => 'rm',
+        self::OPERATION_MOVE => 'mv',
+        self::OPERATION_COMMIT => 'commit',
+        self::OPERATION_BRANCH_ADD => 'branch',
+        self::OPERATION_BRANCH_DELETE => 'branch',
+        self::OPERATION_BRANCH_LIST => 'branch',
+        self::OPERATION_CHECKOUT => 'checkout',
+        self::OPERATION_STATUS => 'status',
+        self::OPERATION_MERGE => 'merge',
+        self::OPERATION_LOG => 'log',
+        self::OPERATION_PULL => 'pull',
+        self::OPERATION_PUSH => 'push',
+        self::OPERATION_FETCH => 'fetch',
+        self::OPERATION_DIFF => 'diff',
+        self::OPERATION_SHOW => 'show',
+        self::OPERATION_CONFIG => 'config',
+        self::OPERATION_REMOTE_ADD => 'remote',
+        self::OPERATION_REMOTE_RENAME => 'remote',
+        self::OPERATION_REMOTE_REMOVE => 'remote',
+        self::OPERATION_REMOTE_SET_HEAD => 'remote',
+        self::OPERATION_REMOTE_SET_BRANCHES => 'remote',
+        self::OPERATION_REMOTE_GET_URL => 'remote',
+        self::OPERATION_REMOTE_SET_URL => 'remote',
+        self::OPERATION_REMOTE_SHOW => 'remote',
+        self::OPERATION_REMOTE_PRUNE => 'remote'
     ];
 }
